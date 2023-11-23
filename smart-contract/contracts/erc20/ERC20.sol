@@ -68,7 +68,7 @@ abstract contract ERC20 is IERC20,IERC20Errors {
     function allowance(address owner, address spender) external view override returns(uint256){
         
     }
-    
+
     function _transfer(
         address from,
         address to,
@@ -76,7 +76,7 @@ abstract contract ERC20 is IERC20,IERC20Errors {
     ) internal {
       uint256 balanceFrom = balanceOf(from);
       uint256 balanceTo = balanceOf(to);
-      if(value >= balanceFrom){
+      if(value > balanceFrom){
         revert ERC20__transferInsufficientBalance();
       }
         _setBalance(from, balanceFrom - value);

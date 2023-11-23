@@ -37,5 +37,15 @@ describe("ERC20", () => {
         const currentBalance = await erc20.balanceOf(accounts[0].address);
         expect(currentBalance).to.be.equal(expectedBalance);
     })
-    
+    it("should transfer", async () => {
+        const { erc20, accounts } = await loadFixture(deployERC20Fixture);
+        const recipient = accounts[1].address;
+        const amount = ethers.parseEther("777");
+        await erc20.transfer(recipient,amount);
+        const expectedBalance = ethers.parseEther("777");
+        const currentBalance = await erc20.balanceOf(recipient);
+        const remeterBalance = await erc20.balanceOf(accounts[0].address);
+        expect(remeterBalance).to.be.equal(0);
+        expect(currentBalance).to.be.equal(expectedBalance);
+    })
 })
