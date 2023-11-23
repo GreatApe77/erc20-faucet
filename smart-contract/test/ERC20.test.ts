@@ -9,7 +9,7 @@ describe("ERC20", () => {
     async function deployERC20Fixture() {
         const accounts = await ethers.getSigners();
         const ERC20Factory = await ethers.getContractFactory("DummyERC20");
-        const erc20 = await ERC20Factory.deploy("Dummy ERC20", "DERC20", 18,ethers.parseEther("777"));
+        const erc20 = await ERC20Factory.deploy("Dummy ERC20", "DERC20",ethers.parseEther("777"));
         return { erc20, accounts };
     }
 

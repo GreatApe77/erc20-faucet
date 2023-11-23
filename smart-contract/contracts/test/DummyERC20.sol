@@ -12,10 +12,6 @@ contract DummyERC20 is ERC20 {
     constructor(
         string memory name_,
         string memory symbol_,
-        uint8 decimals_,
         uint256 totalSupply_
-    ) ERC20(name_, symbol_, decimals_, totalSupply_
-    ) {
-
-    }
+    ) ERC20(name_, symbol_, totalSupply_) {}
 }

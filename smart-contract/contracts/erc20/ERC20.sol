@@ -11,7 +11,6 @@ import {IERC20Errors} from "./interfaces/IERC20Error.sol";
 abstract contract ERC20 is IERC20,IERC20Errors {
     string private _name;
     string private _symbol;
-    uint8 private _decimals;
     uint256 private _totalSupply;
     mapping(address account => uint256 balance) private _balances;
     mapping(address account => mapping(address approvedAddress => uint256 approvedValue)) private _allowances;
@@ -20,18 +19,15 @@ abstract contract ERC20 is IERC20,IERC20Errors {
      * @notice Configuraçoes iniciais do token
      * @param name_ Nome do token
      * @param symbol_ Simbolo do token
-     * @param decimals_ Quantidade de casas decimais do token ex: 18
      * @param totalSupply_ Quantidade total de tokens em circulacao (supply fixo)
      */
     constructor(
         string memory name_,
         string memory symbol_,
-        uint8 decimals_,
         uint256 totalSupply_
     ) {
         _name = name_;
         _symbol = symbol_;
-        _decimals = decimals_;
         _totalSupply = totalSupply_;
         _setBalance(msg.sender, totalSupply_);
     }
@@ -44,8 +40,8 @@ abstract contract ERC20 is IERC20,IERC20Errors {
         return _symbol;
     }
 
-    function decimals() external view returns (uint8) {
-        return _decimals;
+    function decimals() public pure virtual returns (uint8) {
+        return 18;
     }
     function totalSupply() external view returns (uint256) {
         return _totalSupply;
