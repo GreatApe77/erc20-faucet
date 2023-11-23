@@ -14,6 +14,7 @@ abstract contract ERC20 is IERC20,IERC20Errors {
     uint8 private _decimals;
     uint256 private _totalSupply;
     mapping(address account => uint256 balance) private _balances;
+    mapping(address account => mapping(address approvedAddress => uint256 approvedValue)) private _allowances;
 
     /**
      * @notice Configuraçoes iniciais do token
@@ -63,10 +64,17 @@ abstract contract ERC20 is IERC20,IERC20Errors {
        
     }
     function approve(address spender, uint256 value) external override returns(bool){
-        
+        if(spender == address(0)){
+            revert ERC20__approveToZeroAddress();
+        }
+        if(value > balanceOf(msg.sender)){
+            revert ERC20__approveInsufficientBalance();
+        }
+        _approve(msg.sender, spender, value);
+        return true;
     }
     function allowance(address owner, address spender) external view override returns(uint256){
-        
+        return _allowances[owner][spender];
     }
 
     function _transfer(
@@ -83,7 +91,15 @@ abstract contract ERC20 is IERC20,IERC20Errors {
         _setBalance(to, balanceTo + value);
         emit Transfer(from, to, value);
     }
-
+    
+    function _approve(
+        address owner,
+        address spender,
+        uint256 value
+    ) internal {
+        _allowances[owner][spender] = value;
+        emit Approval(owner, spender, value);
+    }
     function _setBalance(address account, uint256 value) internal {
         _balances[account] = value;
     }
