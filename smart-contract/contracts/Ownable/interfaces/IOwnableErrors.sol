@@ -15,4 +15,9 @@ interface IOwnableErrors{
      * @notice Erro emitido quando o endereco do novo dono e o endereco zero
      */
     error Ownable__newOwnerZeroAddress();
+    /**
+     * @notice Erro emitido quando o endereco do novo dono é o endereco do dono atual
+     */
+
+    error Ownable__newOwnerSameAsCurrentOwner();
 }

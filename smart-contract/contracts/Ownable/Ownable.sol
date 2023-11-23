@@ -43,6 +43,9 @@ contract Ownable is IOwnable, IOwnableErrors {
         if(newOwner== address(0)){
             revert Ownable__newOwnerZeroAddress();
         }
+        if(newOwner == owner()){
+            revert Ownable__newOwnerSameAsCurrentOwner();
+        }
         _setOwner(newOwner);
         emit OwnershipTransferred(msg.sender, newOwner);
     }
