@@ -78,6 +78,8 @@ abstract contract ERC20 is IERC20, IERC20Errors {
         if(from == address(0)){
             revert ERC20__transferFromToAddressZero();
         }
+        _transferFrom(from,to,value);
+        return true;
     }
 
     function approve(
