@@ -71,7 +71,14 @@ abstract contract ERC20 is IERC20, IERC20Errors {
         address from,
         address to,
         uint256 value
-    ) external override returns (bool) {}
+    ) external override returns (bool) {
+        if (to == address(0)) {
+            revert ERC20__transferFromToAddressZero();
+        }
+        if(from == address(0)){
+            revert ERC20__transferFromToAddressZero();
+        }
+    }
 
     function approve(
         address spender,
@@ -90,7 +97,7 @@ abstract contract ERC20 is IERC20, IERC20Errors {
     function allowance(
         address owner,
         address spender
-    ) external view override returns (uint256) {
+    ) public view override returns (uint256) {
         return _allowances[owner][spender];
     }
 
@@ -106,11 +113,48 @@ abstract contract ERC20 is IERC20, IERC20Errors {
     }
 
     function _approve(address owner, address spender, uint256 value) internal {
-        _allowances[owner][spender] = value;
+        _setAllowances(owner, spender, value);
         emit Approval(owner, spender, value);
+    }
+
+    function _transferFrom(address from, address to, uint256 value) internal {
+        uint256 balanceFrom = balanceOf(from);
+        uint256 balanceTo = balanceOf(to);
+        uint256 allowanceFrom = allowance(from, msg.sender);
+        if(value==0){
+            revert ERC20__transferFromWithValueZero();
+        }
+        if (value > balanceFrom) {
+            revert ERC20__transferFromInsufficientBalance();
+        }
+        if (value > allowanceFrom) {
+            revert ERC20__transferFromInsufficientAllowance();
+        }
+        _decrementAllowance(from, msg.sender, value);
+        _setBalance(from, balanceFrom - value);
+        _setBalance(to, balanceTo + value);
+        emit Transfer(from, to, value);
+    }
+
+    function _decrementAllowance(
+        address owner,
+        address spender,
+        uint256 value
+    ) internal {
+        uint256 currentAllowance = allowance(owner, spender);
+        uint256 newAllowance = currentAllowance - value;
+        _setAllowances(owner, spender, newAllowance);
     }
 
     function _setBalance(address account, uint256 value) internal {
         _balances[account] = value;
+    }
+
+    function _setAllowances(
+        address owner,
+        address spender,
+        uint256 value
+    ) internal {
+        _allowances[owner][spender] = value;
     }
 }

@@ -15,6 +15,9 @@ interface IERC20Errors {
     error ERC20__transferAllowanceInsufficientBalance();
 
     error ERC20__transferFromInsufficientAllowance();
+    error ERC20__transferFromFromAddressZero();
+    error ERC20__transferFromToAddressZero();
+    error ERC20__transferFromWithValueZero();
 
     error ERC20__approveToZeroAddress();
 
