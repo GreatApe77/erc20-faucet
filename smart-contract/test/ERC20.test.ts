@@ -48,6 +48,18 @@ describe("ERC20", () => {
         expect(remeterBalance).to.be.equal(0);
         expect(currentBalance).to.be.equal(expectedBalance);
     })
+    it("should NOT transfer (insufficient balance)", async () => {
+        const { erc20, accounts } = await loadFixture(deployERC20Fixture);
+        const recipient = accounts[1].address;
+        const amount = ethers.parseEther("778");
+        await expect(erc20.transfer(recipient,amount)).to.be.revertedWithCustomError(erc20,"ERC20__transferInsufficientBalance")
+    })
+    it("should NOT transfer (address(0))", async () => {
+        const { erc20, accounts } = await loadFixture(deployERC20Fixture);
+        const recipient = ethers.ZeroAddress;
+        const amount = ethers.parseEther("777");
+        await expect(erc20.transfer(recipient,amount)).to.be.revertedWithCustomError(erc20,"ERC20__transferToZeroAddress")
+    })
     it("should approve", async () => { 
         const { erc20, accounts } = await loadFixture(deployERC20Fixture);
         const spender = accounts[1].address;
@@ -69,4 +81,25 @@ describe("ERC20", () => {
         const amount = ethers.parseEther("777");
         await expect(erc20.approve(spender,amount)).to.be.revertedWithCustomError(erc20,"ERC20__approveToZeroAddress")
     })
+    it("should transferFrom", async () => {
+        const { erc20, accounts } = await loadFixture(deployERC20Fixture);
+        const spender = accounts[1].address;
+        const recipient = accounts[2].address;
+        const amount = ethers.parseEther("777");
+        await erc20.approve(spender,amount);
+        await erc20.connect(accounts[1]).transferFrom(accounts[0].address,recipient,amount);
+        const expectedBalance = ethers.parseEther("777");
+        const currentBalance = await erc20.balanceOf(recipient);
+        const remeterBalance = await erc20.balanceOf(accounts[0].address);
+        expect(remeterBalance).to.be.equal(0);
+        expect(currentBalance).to.be.equal(expectedBalance);
+    })
+    it("should NOT transferFrom (not approved)", async () => {
+        const { erc20, accounts } = await loadFixture(deployERC20Fixture);
+        const spender = accounts[1]
+        const recipient = accounts[2]
+        const amount = ethers.parseEther("777");
+        await expect(erc20.connect(spender).transferFrom(accounts[0].address,recipient,amount)).to.be.revertedWithCustomError(erc20,"ERC20__transferFromInsufficientAllowance")
+    })
+
 })
