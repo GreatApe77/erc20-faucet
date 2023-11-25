@@ -8,7 +8,7 @@ import { ethers } from "hardhat";
 describe("Ownable", () => {
 	async function deployOwnableFixture() {
 		const accounts = await ethers.getSigners();
-		const OwnableFactory = await ethers.getContractFactory("Ownable");
+		const OwnableFactory = await ethers.getContractFactory("DummyOwnable");
 		const ownable = await OwnableFactory.deploy();
 		return { ownable, accounts };
 	}

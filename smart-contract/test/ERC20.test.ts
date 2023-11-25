@@ -101,5 +101,37 @@ describe("ERC20", () => {
         const amount = ethers.parseEther("777");
         await expect(erc20.connect(spender).transferFrom(accounts[0].address,recipient,amount)).to.be.revertedWithCustomError(erc20,"ERC20__transferFromInsufficientAllowance")
     })
+    it("should NOT transferFrom (to address(0))", async () => {
+        const { erc20, accounts } = await loadFixture(deployERC20Fixture);
+        const spender = accounts[1]
+        const recipient = ethers.ZeroAddress
+        await erc20.approve(spender.address,ethers.parseEther("777"))
+        const amount = ethers.parseEther("777");
+        await expect(erc20.connect(spender).transferFrom(accounts[0].address,recipient,amount)).to.be.revertedWithCustomError(erc20,"ERC20__transferFromToAddressZero")
+    })
+    it("should not transferFrom (from address(0))", async () => {
+        const { erc20, accounts } = await loadFixture(deployERC20Fixture);
+        const spender = accounts[1]
+        const recipient = accounts[2]
+        const amount = ethers.parseEther("777");
+        await erc20.approve(spender.address,amount)
+        await expect(erc20.connect(spender).transferFrom(ethers.ZeroAddress,recipient,amount)).to.be.revertedWithCustomError(erc20,"ERC20__transferFromFromAddressZero")
+    })
+    it("should not transferFrom (value ==0)", async () => {
+        const { erc20, accounts } = await loadFixture(deployERC20Fixture);
+        const spender = accounts[1]
+        const recipient = accounts[2]
+        const amount = ethers.parseEther("777");
+        await erc20.approve(spender.address,amount)
+        await expect(erc20.connect(spender).transferFrom(accounts[0].address,recipient,0)).to.be.revertedWithCustomError(erc20,"ERC20__transferFromWithValueZero")
+    })
+    it("should not transferFrom (insufficient balance)", async () => {
+        const { erc20, accounts } = await loadFixture(deployERC20Fixture);
+        const spender = accounts[1]
+        const recipient = accounts[2]
+        const amount = ethers.parseEther("778");
+       // await erc20.approve(spender.address,amount)
+        await expect(erc20.connect(spender).transferFrom(accounts[0].address,recipient,amount)).to.be.revertedWithCustomError(erc20,"ERC20__transferFromInsufficientBalance")
+    })
 
 })
