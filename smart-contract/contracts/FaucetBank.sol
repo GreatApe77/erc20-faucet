@@ -1,26 +1,44 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-import {GreatApe77Coin} from "./GreatApe77Coin.sol";
 import {Ownable} from "./Ownable/Ownable.sol";
+import {IERC20} from "./erc20/interfaces/IERC20.sol";
 
 contract FaucetBank is Ownable {
-    error FaucetBank__GreatApe77CoinAlreadyCreated();
+    error FaucetBank__TokenNotSetted();
 
-    enum CoinDeployedStatus {
-        NOT_CREATED,
-        CREATED
+    IERC20 public greatApe77Coin;
+    uint256 public claimAmount = 7 ether;
+    uint256 public claimInterval = 2 minutes;
+
+    event ClaimAmountChanged(uint256 indexed newAmount);
+    event ClaimIntervalChanged(uint256 indexed newInterval);
+
+    constructor(address tokenAddress) {
+        greatApe77Coin = IERC20(tokenAddress);
     }
 
-    CoinDeployedStatus internal _coinStatus;
-    GreatApe77Coin public greatApe77Coin;
-    event CoinLaunched(address indexed coinAddress);
-    function lauchCoin() external onlyOwner {
-        if (_coinStatus == CoinDeployedStatus.CREATED) {
-            revert FaucetBank__GreatApe77CoinAlreadyCreated();
-        }
-        _coinStatus = CoinDeployedStatus.CREATED;
-        greatApe77Coin = new GreatApe77Coin();
-        emit CoinLaunched(address(greatApe77Coin));
+    function claimFaucets(address to) external onlyOwner {
+        greatApe77Coin.transfer(to, claimAmount);
+    }
+
+    function withdrawAmount(uint256 amount) external onlyOwner {
+        greatApe77Coin.transfer(msg.sender, amount);
+    }
+
+    function setTokenAddress(address tokenAddress) external onlyOwner {
+        greatApe77Coin = IERC20(tokenAddress);
+    }
+
+    function setClaimAmount(uint256 amount) external onlyOwner {
+        claimAmount = amount;
+        emit ClaimAmountChanged(amount);
+    }
+
+    function setClaimIntervalInSeconds(
+        uint256 intervalInSeconds
+    ) external onlyOwner {
+        claimInterval = intervalInSeconds;
+        emit ClaimIntervalChanged(intervalInSeconds);
     }
 }

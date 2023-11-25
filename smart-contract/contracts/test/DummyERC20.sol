@@ -10,8 +10,9 @@ import {ERC20} from "../erc20/ERC20.sol";
 
 contract DummyERC20 is ERC20 {
     constructor(
-        string memory name_,
-        string memory symbol_,
-        uint256 totalSupply_
-    ) ERC20(name_, symbol_, totalSupply_) {}
+        string memory name,
+        string memory symbol,
+        uint256 totalSupply,
+        address initialSupplyReceiver
+    ) ERC20(name, symbol, totalSupply, initialSupplyReceiver) {}
 }

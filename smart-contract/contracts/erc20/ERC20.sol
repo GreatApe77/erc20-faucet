@@ -24,16 +24,18 @@ abstract contract ERC20 is IERC20, IERC20Errors {
      * @param name_ Nome do token
      * @param symbol_ Simbolo do token
      * @param totalSupply_ Quantidade total de tokens em circulacao (supply fixo)
+     * @param initialSupplyReceiver Endereco que recebera a quantidade total de tokens
      */
     constructor(
         string memory name_,
         string memory symbol_,
-        uint256 totalSupply_
+        uint256 totalSupply_,
+        address initialSupplyReceiver
     ) {
         _name = name_;
         _symbol = symbol_;
         _totalSupply = totalSupply_;
-        _setBalance(msg.sender, totalSupply_);
+        _setBalance(initialSupplyReceiver, totalSupply_);
     }
 
     function name() external view returns (string memory) {
