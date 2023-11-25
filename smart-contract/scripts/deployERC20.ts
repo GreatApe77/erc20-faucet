@@ -1,11 +1,12 @@
 import { ethers } from "hardhat";
-
+import { saveDeployment} from "deployment-history"
 async function main() {
-  const accounts = await ethers.getSigners();
-  const ERC20Factory = await ethers.getContractFactory("DummyERC20");
-  const erc20 = await ERC20Factory.deploy("Dummy ERC20", "DERC20",ethers.parseEther("777"));
+  const network = await ethers.provider.getNetwork();
+  const ERC20Factory = await ethers.getContractFactory("GreatApe77Coin");
+  const erc20 = await ERC20Factory.deploy();
   const address = await erc20.getAddress()
-  console.log(address)  
+  console.log(address)
+  saveDeployment(`GreatApe77Coin: ${address}`,network.name)
 }
 
 
