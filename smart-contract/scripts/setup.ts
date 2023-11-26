@@ -7,11 +7,18 @@ async function main(){
     const signers = await ethers.getSigners();
     const FaucetBankFactory = await ethers.getContractFactory("FaucetBank");
     const GreatApe77CoinFactory = await ethers.getContractFactory("GreatApe77Coin");
+    console.log(`Deploying ERC20...`)
     const greatApe77Coin = await GreatApe77CoinFactory.deploy(signers[0].address);
+    await greatApe77Coin.waitForDeployment()
+    console.log(`Deploying FaucetBank...`)
     const faucetBank = await FaucetBankFactory.deploy(await greatApe77Coin.getAddress());
-    await greatApe77Coin.transfer(await faucetBank.getAddress(),ethers.parseEther("777"))
+    await faucetBank.waitForDeployment()
+    console.log(`Transfering tokens to FaucetBank...`)
+    const response = await greatApe77Coin.transfer(await faucetBank.getAddress(),ethers.parseEther("777"))
+    await response.wait()
     const address = await faucetBank.getAddress()
-    console.log(address)
+    console.log(`Bank address: ${address}`)
+    console.log(`GreatApe77Coin address: ${await greatApe77Coin.getAddress()}`)
     saveDeployment(`GreatApe77Coin: ${await greatApe77Coin.getAddress()}`,network.name)
     saveDeployment(`FaucetBank: ${address}`,network.name)
 }
