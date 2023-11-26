@@ -36,7 +36,7 @@ contract GreatApe77Coin is ERC20 {
     )
         ERC20(
             "GreatApe77 Coin",
-            "GRTAPE",
+            "GRTPC",
             77000000 ether,
             initialSupplyReceiver
         )

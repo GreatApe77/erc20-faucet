@@ -14,6 +14,9 @@ contract FaucetBank is Ownable {
      * @dev Erro lancado quando o endereco do token nao foi setado
      */
     error FaucetBank__TokenNotSetted();
+    /**
+     * @dev Erro lancado quando o intervalo de tempo entre cada claim nao foi atingido
+     */
     error FaucetBank__ClaimIntervalNotReached();
     /**
      * @notice Token GreatApe77 Coin
