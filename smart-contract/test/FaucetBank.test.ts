@@ -73,4 +73,20 @@ describe("FaucetBank", () => {
         const newDummyERC20Address = await newDummyERC20.getAddress()
         await expect(faucetBank.connect(accounts[1]).setTokenAddress(newDummyERC20Address)).to.be.revertedWithCustomError(faucetBank,"Ownable__notOwner")
     })
+    it("should claim Faucets", async () => {
+        const { faucetBank, accounts,erc20 } = await loadFixture(deployFaucetBankFixture);
+        const faucetAddress = await faucetBank.getAddress()
+        await erc20.transfer(faucetAddress,ethers.parseEther("777"))
+        const claimAmount = await faucetBank.claimAmount()
+        await faucetBank.claimFaucets(accounts[1].address)
+        const balance = await erc20.balanceOf(accounts[1].address)
+        expect(balance).to.be.equal(claimAmount);
+    })
+    it("should not claim Faucets (not owner)", async () => {
+        const { faucetBank, accounts,erc20 } = await loadFixture(deployFaucetBankFixture);
+        const faucetAddress = await faucetBank.getAddress()
+        await erc20.transfer(faucetAddress,ethers.parseEther("777"))
+        await expect(faucetBank.connect(accounts[1]).claimFaucets(accounts[1].address)).to.be.revertedWithCustomError(faucetBank,"Ownable__notOwner")
+    })
+    
 })
