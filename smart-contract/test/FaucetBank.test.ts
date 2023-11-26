@@ -106,4 +106,20 @@ describe("FaucetBank", () => {
         //const claimAmount = await faucetBank.claimAmount()
         expect(balance).to.be.equal(ethers.parseEther("14"));  
     })
+    it("should withdraw Faucets as owner", async () => {
+        const { faucetBank, accounts,erc20 } = await loadFixture(deployFaucetBankFixture);
+        const faucetAddress = await faucetBank.getAddress()
+        await erc20.transfer(faucetAddress,ethers.parseEther("777"))
+        await faucetBank.withdrawAmount(ethers.parseEther("77"))
+        const balance = await erc20.balanceOf(accounts[0].address)
+        expect(balance).to.be.equal(ethers.parseEther("77"));
+        
+    })
+    it("should not withdraw Faucets (not owner)", async () => {
+        const { faucetBank, accounts,erc20 } = await loadFixture(deployFaucetBankFixture);
+        const faucetAddress = await faucetBank.getAddress()
+        await erc20.transfer(faucetAddress,ethers.parseEther("777"))
+        await expect(faucetBank.connect(accounts[1]).withdrawAmount(ethers.parseEther("77"))).to.be.revertedWithCustomError(faucetBank,"Ownable__notOwner")
+    })
+    
 })
