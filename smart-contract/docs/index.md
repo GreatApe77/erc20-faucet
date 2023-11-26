@@ -12,6 +12,14 @@ error FaucetBank__TokenNotSetted()
 
 _Erro lancado quando o endereco do token nao foi setado_
 
+### FaucetBank__ClaimIntervalNotReached
+
+```solidity
+error FaucetBank__ClaimIntervalNotReached()
+```
+
+_Erro lancado quando o intervalo de tempo entre cada claim nao foi atingido_
+
 ### greatApe77Coin
 
 ```solidity
@@ -19,6 +27,14 @@ contract IERC20 greatApe77Coin
 ```
 
 Token GreatApe77 Coin
+
+### nextClaim
+
+```solidity
+mapping(address => uint256) nextClaim
+```
+
+Mapeia o endereco do usuario para o proximo claim
 
 ### claimAmount
 
