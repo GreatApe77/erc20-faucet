@@ -14,10 +14,15 @@ contract FaucetBank is Ownable {
      * @dev Erro lancado quando o endereco do token nao foi setado
      */
     error FaucetBank__TokenNotSetted();
+    error FaucetBank__ClaimIntervalNotReached();
     /**
      * @notice Token GreatApe77 Coin
      */
     IERC20 public greatApe77Coin;
+    /**
+     * @notice Mapeia o endereco do usuario para o proximo claim
+     */
+    mapping (address account => uint nextClaim) public nextClaim;
     /**
      * @notice Quantidade de tokens que serao enviados a cada claim
      */
@@ -49,6 +54,10 @@ contract FaucetBank is Ownable {
      * @param to Endereco que recebera os tokens
      */
     function claimFaucets(address to) external onlyOwner {
+        if(block.timestamp < nextClaim[to]) {
+            revert FaucetBank__ClaimIntervalNotReached();
+        }
+        nextClaim[to] = block.timestamp + claimInterval;
         greatApe77Coin.transfer(to, claimAmount);
     }
 

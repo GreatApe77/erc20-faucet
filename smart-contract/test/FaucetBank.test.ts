@@ -4,7 +4,7 @@ import {
 
 import { expect } from "chai";
 import { ethers } from "hardhat";
-
+import { time } from "@nomicfoundation/hardhat-toolbox/network-helpers";
 
 describe("FaucetBank", () => {
     async function deployERC20Fixture() {
@@ -88,5 +88,22 @@ describe("FaucetBank", () => {
         await erc20.transfer(faucetAddress,ethers.parseEther("777"))
         await expect(faucetBank.connect(accounts[1]).claimFaucets(accounts[1].address)).to.be.revertedWithCustomError(faucetBank,"Ownable__notOwner")
     })
-    
+    it("should not claim Faucets (not reached nextClaim timestamp)", async () => {
+        const { faucetBank, accounts,erc20 } = await loadFixture(deployFaucetBankFixture);
+        const faucetAddress = await faucetBank.getAddress()
+        await erc20.transfer(faucetAddress,ethers.parseEther("777"))
+        await faucetBank.claimFaucets(accounts[1].address)
+        await expect(faucetBank.claimFaucets(accounts[1].address)).to.be.revertedWithCustomError(faucetBank,"FaucetBank__ClaimIntervalNotReached")
+    })
+    it("should claim faucets after nextClaim timestamp", async () => {
+        const { faucetBank, accounts,erc20 } = await loadFixture(deployFaucetBankFixture);
+        const faucetAddress = await faucetBank.getAddress()
+        await erc20.transfer(faucetAddress,ethers.parseEther("777"))
+        await faucetBank.claimFaucets(accounts[1].address)
+        await time.increase(120)
+        await faucetBank.claimFaucets(accounts[1].address)
+        const balance = await erc20.balanceOf(accounts[1].address)
+        //const claimAmount = await faucetBank.claimAmount()
+        expect(balance).to.be.equal(ethers.parseEther("14"));  
+    })
 })
