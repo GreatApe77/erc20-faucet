@@ -1,7 +1,7 @@
 import User from "../models/User";
 import { ethers } from "ethers";
 import { NEXTCLAIM } from "./utils/constants";
-
+import crypto from "crypto"
 function getCurrentTimeStamp() {
     return Math.floor(Date.now() / 1000)
 }
@@ -33,5 +33,8 @@ describe("User", () => {
         });
         user.lastClaimed = getCurrentTimeStamp()
         expect(user.lastClaimed!==0).toBe(true)
+    })
+    it("should encrypt a user private key before creating user ", async () => {
+
     })
 });
