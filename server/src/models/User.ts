@@ -6,8 +6,8 @@ const userSchema = new mongoose.Schema({
     password: {type: String, required: true},
     custodyAccountPublicKey: {type: String, required: true},
     custodyAccountPrivateKey: {type: String, required: true},
-    lastClaimed: {type: Date, required: true},
-    nextClaim: {type: Date, required: true},
+    lastClaimed: {type: Number, required: true},
+    nextClaim: {type: Number, required: true},
 })
 
 export default   mongoose.model("User", userSchema) || mongoose.models.User
