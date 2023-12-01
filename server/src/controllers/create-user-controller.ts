@@ -7,7 +7,7 @@ export async function createUserController(req: Request, res: Response,next:Next
         const user = req.body as TypeUser;
         const wallet = ethers.Wallet.createRandom();
         user.custodyAccountPrivateKey = wallet.privateKey
-        user.custodyAccountPublicKey = wallet.address
+        user.custodyAccountPublicKey = wallet.address.toLowerCase()
         user.lastClaimed = 0
         user.nextClaim = 0
 
