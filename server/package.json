@@ -6,7 +6,8 @@
   "scripts": {
     "test": "npx jest --config jest.config.js",
     "dev": "npx tsx --watch src/index.ts",
-    "generatetypes": "npx typechain --target ethers-v6 --out-dir src/contract-types --always-generate-overloads src/abis/*.json"
+    "build": "npm run generatetypes && npx tsc",
+    "generatetypes": "npx typechain --target ethers-v6 --out-dir src/contract-types  src/abis/*.json"
   },
   "keywords": [],
   "author": "",
