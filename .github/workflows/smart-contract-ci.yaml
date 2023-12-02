@@ -18,8 +18,8 @@ jobs:
       - name: Install dependencies
         run:  cd ./smart-contract && npm install
       - name: Compile Contracts
-        run: npm run compile
+        run:  cd ./smart-contract && npm run compile
       - name: Run Tests
-        run: npm run test
+        run:  cd ./smart-contract && npm run test
 
       
