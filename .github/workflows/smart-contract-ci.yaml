@@ -1,0 +1,25 @@
+name: Testing Smart Contracts
+
+on:
+  push:
+    branches:
+      - "main"
+
+jobs:
+  continous-integration:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Using node 18
+        uses: actions/setup-node@v2
+        with:
+          node-version: 18.x
+      - name: Install dependencies
+        run:  cd ./smart-contracts && npm install
+      - name: Compile Contracts
+        run: npm run compile
+      - name: Run Tests
+        run: npm run test
+
+      
