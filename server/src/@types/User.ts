@@ -1,3 +1,7 @@
+
+/**
+ * @dev Tipo de dado para usuário
+ */
 export type TypeUser = {
     _id?: string;
     nickname?: string;
