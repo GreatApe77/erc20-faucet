@@ -5,11 +5,11 @@ import {
 	FAUCET_BANK_CONTRACT_ADDRESS,
 } from "./contract-connection";
 import { FaucetBank, GreatApe77Coin } from "../contract-types";
-
 dotenv.config();
+
 const provider = new ethers.JsonRpcProvider(`${process.env.RPC_URL}`);
 
-const wallet = new ethers.Wallet(`${process.env.PRIVATE_KEY}`, provider);
+const wallet = new ethers.Wallet(`${process.env.PRIVATE_KEY_ADMIN}`, provider);
 
 const faucetBank = new ethers.Contract(
 	FAUCET_BANK_CONTRACT_ADDRESS,
@@ -23,7 +23,9 @@ const greatApe77Coin = new ethers.Contract(
 ) as unknown as GreatApe77Coin;
 
 
-faucetBank.owner().then((owner) => {
-    console.log("Faucet Bank owner:", owner);
+export {
+    provider,
+    wallet,
+    faucetBank,
+    greatApe77Coin
 }
-);

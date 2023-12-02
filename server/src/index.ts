@@ -6,7 +6,7 @@ dotenv.config();
 const PORT = process.env.PORT || 8080;
 async function main() {
 	await connectMongo();
-
+	
 	app.listen(PORT, () => {
 		console.log(`Listening: ${PORT}`);
 	});
