@@ -6,7 +6,7 @@ on:
       - "main"
 
 jobs:
-  continous-integration:
+  test-smart-contracts:
     runs-on: ubuntu-latest
 
     steps:
