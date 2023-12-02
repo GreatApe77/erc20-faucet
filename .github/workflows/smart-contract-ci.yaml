@@ -16,7 +16,7 @@ jobs:
         with:
           node-version: 18.x
       - name: Install dependencies
-        run:  cd ./smart-contracts && npm install
+        run:  cd ./smart-contract && npm install
       - name: Compile Contracts
         run: npm run compile
       - name: Run Tests
