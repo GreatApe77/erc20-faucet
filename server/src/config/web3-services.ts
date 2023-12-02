@@ -11,12 +11,12 @@ const provider = new ethers.JsonRpcProvider(`${process.env.RPC_URL}`);
 
 const wallet = new ethers.Wallet(`${process.env.PRIVATE_KEY_ADMIN}`, provider);
 
-const faucetBank = new ethers.Contract(
+const faucetBankInstance = new ethers.Contract(
 	FAUCET_BANK_CONTRACT_ADDRESS,
 	require("../abis/FaucetBank.json"),
 	wallet
 ) as unknown as FaucetBank;
-const greatApe77Coin = new ethers.Contract(
+const greatApe77CoinInstance = new ethers.Contract(
 	ERC20_TOKEN_CONTRACT_ADDRESS,
 	require("../abis/GreatApe77Coin.json"),
 	wallet
@@ -26,6 +26,6 @@ const greatApe77Coin = new ethers.Contract(
 export {
     provider,
     wallet,
-    faucetBank,
-    greatApe77Coin
+    faucetBankInstance,
+    greatApe77CoinInstance
 }
