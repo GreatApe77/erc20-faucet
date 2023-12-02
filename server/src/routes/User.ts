@@ -4,6 +4,9 @@ import { getSingleUserController } from "../controllers/getSingleUserController"
 
 import { getUsersController } from "../controllers/get-users-controller";
 
+/**
+ * @dev Roteador para todos os endpoints de usuário
+ */
 const router__User = express.Router();
 
 

@@ -3,6 +3,11 @@ import { Types } from "mongoose";
 import { TypeUser } from "../@types/User";
 import User from "../models/User";
 
+/**
+ * @dev Cria um usuário no banco de dados
+ * @param id Identificador do usuário ex: _id, nickname, custodyAccountPublicKey
+ * @returns Usuário encontrado
+ */
 export async function getSingleUserRepository(id: string) {
 	let query;
 
