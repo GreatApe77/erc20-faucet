@@ -4,7 +4,7 @@ import {
 	ERC20_TOKEN_CONTRACT_ADDRESS,
 	FAUCET_BANK_CONTRACT_ADDRESS,
 } from "./contract-connection";
-import { FaucetBank, GreatApe77Coin } from "../contract-types";
+import { FaucetBank__factory,GreatApe77Coin__factory } from "../typechain-types";
 dotenv.config();
 
 /**
@@ -20,19 +20,12 @@ const wallet = new ethers.Wallet(`${process.env.PRIVATE_KEY_ADMIN}`, provider);
 /**
  * @dev Instância do contrato FaucetBank tipada pelos tipos gerados pelo plugin typechain
  */
-const faucetBankInstance = new ethers.Contract(
-	FAUCET_BANK_CONTRACT_ADDRESS,
-	require("../abis/FaucetBank.json"),
-	wallet
-) as unknown as FaucetBank;
+const faucetBankInstance = FaucetBank__factory.connect(FAUCET_BANK_CONTRACT_ADDRESS,wallet)
+
 /**
  * @dev Instância do contrato GreatApe77Coin tipada pelos tipos gerados pelo plugin typechain
  */
-const greatApe77CoinInstance = new ethers.Contract(
-	ERC20_TOKEN_CONTRACT_ADDRESS,
-	require("../abis/GreatApe77Coin.json"),
-	wallet
-) as unknown as GreatApe77Coin;
+const greatApe77CoinInstance = GreatApe77Coin__factory.connect(ERC20_TOKEN_CONTRACT_ADDRESS,wallet)
 
 
 export {
