@@ -21,7 +21,7 @@ export async function getSingleUserRepository(id: string) {
     
 	const userFound = await User.findOne(
 		query,
-		"-password -custodyAccountPrivateKey -__v"
+		"-__v"
 	);
 	return userFound;
 }
