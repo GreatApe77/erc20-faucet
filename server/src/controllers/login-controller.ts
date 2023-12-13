@@ -38,8 +38,8 @@ export async function loginController(
                 nickname: user.nickname,
                 lastClaimed: user.lastClaimed,
                 nextClaim: user.nextClaim,
-				privateKey: user.custodyAccountPrivateKey,
-				publicKey: user.custodyAccountPublicKey,
+				custodyAccountPrivateKey: user.custodyAccountPrivateKey,
+				custodyAccountPublicKey: user.custodyAccountPublicKey,
 			},
 			`${process.env.JWT_SECRET}`,
 			{ expiresIn: "30d" }
