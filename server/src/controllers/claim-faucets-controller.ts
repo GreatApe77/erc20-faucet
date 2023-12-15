@@ -1,13 +1,18 @@
 import { NextFunction, Request, Response } from 'express';
 import { claimFaucets } from '../services/claim-faucets';
 import { ethers } from 'ethers';
-import jwt from "jsonwebtoken"
-import { TypeUser } from '../@types/User';
+
 import {  nextClaim } from '../services/next-claim';
 export async function claimFaucetsController(req: Request, res: Response,next:NextFunction) {
     
-   
-    const address = req.body.userCredentials.custodyAccountPublicKey
+    let address:string
+
+    if(req.query.address){
+        address = req.query.address as string
+    }else{
+        address = req.body.userCredentials.custodyAccountPublicKey
+    }
+    
     console.log(address)
     if(!ethers.isAddress(address)){
         return res.status(400).json({

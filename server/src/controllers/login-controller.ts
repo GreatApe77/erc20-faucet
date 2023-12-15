@@ -25,7 +25,7 @@ export async function loginController(
 				message: "User not found",
 			});
 		}
-        console.log(user)
+        
 		const passwordMatch = await compare(password, user.password);
 		if (!passwordMatch) {
 			return res.status(400).json({
