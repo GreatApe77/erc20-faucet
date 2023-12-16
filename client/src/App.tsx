@@ -1,11 +1,10 @@
-import Container from "@mui/material/Container";
-import TopBar from "./components/AppBar";
+import TopBar from "./components/TopBar";
 
 function App() {
 	return (
-		<Container  >
+		<  >
 			<TopBar/>
-		</Container>
+		</>
 	);
 }
 
