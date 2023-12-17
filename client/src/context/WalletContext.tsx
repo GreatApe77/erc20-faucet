@@ -3,7 +3,7 @@ import { connectSigner } from "../web3-services/ConnectSigner";
 
 type WalletContextType = {
     account: string;
-    connectWallet: () => void;
+    connectWallet: ()=> Promise<void>;
     setAccount: Dispatch<SetStateAction<string>>;
 };
 
