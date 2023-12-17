@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import  { useContext, useState } from 'react';
 import {
   AppBar,
   Toolbar,
@@ -14,11 +14,12 @@ import {
   Box,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
+import { WalletContext } from '../context/WalletContext';
 
 export default function TopBar() {
   const isMobile = useMediaQuery('(max-width:600px)');
   const [drawerOpen, setDrawerOpen] = useState(false);
-
+  const {connectWallet} = useContext(WalletContext);
   const handleDrawerOpen = () => {
     setDrawerOpen(true);
   };
@@ -54,7 +55,7 @@ export default function TopBar() {
             <Button color="primary" variant="text">
               Register
             </Button>
-            <Button color="info" variant="outlined">
+            <Button onClick={connectWallet} color="info" variant="outlined">
               <Avatar src="/MetaMask_Fox.svg" />
               Connect Wallet
             </Button>
