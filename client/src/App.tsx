@@ -19,6 +19,7 @@ function App() {
 				});
 			}
 		}
+		
 	},[])
 	if (window.ethereum) {
 		window.ethereum.on("accountsChanged", (accounts: any) => {
