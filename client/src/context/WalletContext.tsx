@@ -1,12 +1,13 @@
 import { createContext, useState, Dispatch, SetStateAction } from "react";
 import { connectSigner } from "../web3-services/ConnectSigner";
 
+type WalletContextType = {
+    account: string;
+    connectWallet: () => void;
+    setAccount: Dispatch<SetStateAction<string>>;
+};
 
-export const WalletContext = createContext({
-	account: "",
-	connectWallet: async () => {},
-	setAccount: () => {},
-});
+export const WalletContext = createContext({} as WalletContextType);
 type Props = {
 	children: React.ReactNode;
 };

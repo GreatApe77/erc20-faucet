@@ -1,19 +1,33 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import TopBar from "./components/TopBar";
 import { WalletContext } from "./context/WalletContext";
-import { Typography } from "@mui/material";
+import { getCurrentAccountInfo } from "./web3-services/ConnectSigner";
+
 function App() {
-	const { account,connectWallet,setAccount} = useContext(WalletContext);
-	if(window.ethereum){
-		window.ethereum.on('accountsChanged' ,(accounts:any)=> {
-			setAccount(accounts[0])
-		})
+	const { setAccount } = useContext(WalletContext);
+	useEffect(() => {
+		if(window.ethereum){
+			if(window.ethereum._metamask.isUnlocked()){
+				getCurrentAccountInfo()
+				.then((account) => {
+					setAccount(account);
+					localStorage.setItem("account", account);
+				})
+				.catch((err) => {
+					console.error(err);
+				});
+			}
+		}
+	},[])
+	if (window.ethereum) {
+		window.ethereum.on("accountsChanged", (accounts: any) => {
+			setAccount(accounts[0]);
+			localStorage.setItem("account", accounts[0]);
+		});
 	}
 	return (
-		<  >
-			<TopBar/>
-			
-			<Typography variant="h1">{account}</Typography>
+		<>
+			<TopBar />
 		</>
 	);
 }

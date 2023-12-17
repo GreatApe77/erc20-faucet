@@ -9,17 +9,18 @@ import {
   Avatar,
   Drawer,
   List,
-  ListItem,
   ListItemText,
   Box,
+  ListItemButton,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { WalletContext } from '../context/WalletContext';
+import { formatAddress } from '../utils/formatAddress';
 
 export default function TopBar() {
   const isMobile = useMediaQuery('(max-width:600px)');
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const { connectWallet } = useContext(WalletContext);
+  const { connectWallet,account } = useContext(WalletContext);
   const handleDrawerOpen = () => {
     setDrawerOpen(true);
   };
@@ -57,7 +58,7 @@ export default function TopBar() {
             </Button>
             <Button onClick={connectWallet} color="info" variant="outlined">
               <Avatar src="/MetaMask_Fox.svg" />
-              Connect Wallet
+              {account ? formatAddress(account) : 'Connect Wallet'}
             </Button>
           </Box>
         )}
@@ -65,15 +66,15 @@ export default function TopBar() {
         {/* Drawer for mobile */}
         <Drawer anchor="right" open={drawerOpen} onClose={handleDrawerClose}>
           <List>
-            <ListItem button onClick={handleDrawerClose}>
+            <ListItemButton  onClick={handleDrawerClose}>
               <ListItemText primary="Login" />
-            </ListItem>
-            <ListItem button onClick={handleDrawerClose}>
+            </ListItemButton>
+            <ListItemButton onClick={handleDrawerClose}>
               <ListItemText primary="Register" />
-            </ListItem>
-            <ListItem button onClick={handleDrawerClose}>
+            </ListItemButton>
+            <ListItemButton  onClick={handleDrawerClose}>
               <ListItemText primary="Connect Wallet" />
-            </ListItem>
+            </ListItemButton>
           </List>
         </Drawer>
       </Toolbar>
