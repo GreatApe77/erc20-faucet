@@ -19,7 +19,7 @@ import { WalletContext } from '../context/WalletContext';
 export default function TopBar() {
   const isMobile = useMediaQuery('(max-width:600px)');
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const {connectWallet} = useContext(WalletContext);
+  const { connectWallet } = useContext(WalletContext);
   const handleDrawerOpen = () => {
     setDrawerOpen(true);
   };

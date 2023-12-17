@@ -3,13 +3,12 @@ import TopBar from "./components/TopBar";
 import { WalletContext } from "./context/WalletContext";
 import { Typography } from "@mui/material";
 function App() {
+	const { account,connectWallet,setAccount} = useContext(WalletContext);
 	if(window.ethereum){
 		window.ethereum.on('accountsChanged' ,(accounts:any)=> {
-			// Time to reload your interface with accounts[0]!
-			console.log(accounts[0]);
+			setAccount(accounts[0])
 		})
 	}
-	const { account,connectWallet} = useContext(WalletContext);
 	return (
 		<  >
 			<TopBar/>
