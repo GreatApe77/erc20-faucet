@@ -9,9 +9,10 @@ function App() {
 		if(window.ethereum){
 			if(window.ethereum._metamask.isUnlocked()){
 				getCurrentAccountInfo()
-				.then((account) => {
-					setAccount(account);
-					localStorage.setItem("account", account);
+				.then((accountInformation) => {
+					console.log(accountInformation)
+					setAccount(accountInformation.address);
+					
 				})
 				.catch((err) => {
 					console.error(err);

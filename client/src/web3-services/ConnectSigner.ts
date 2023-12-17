@@ -6,8 +6,19 @@ export async function getCurrentAccountInfo() {
 	}
 
 	try {
-		const account = await window.ethereum.request({ method: "eth_accounts" });
-		return account[0];
+		//const accounts = await window.ethereum.request({ method: "eth_accounts" });
+		//return accounts[0]
+		const provider = new ethers.BrowserProvider(window.ethereum);
+		const [accounts, balance, network] = await Promise.all([
+			window.ethereum.request({ method: "eth_accounts" }),
+			provider.getBalance(window.ethereum.selectedAddress),
+			provider.getNetwork(),
+		]);
+        return {
+            address: accounts[0],
+            balance: ethers.formatEther(balance),
+            network: network.chainId,
+        }
 	} catch (error) {
 		console.error(error);
 		throw new Error("must conect to metamask first");
