@@ -3,6 +3,7 @@ import TopBar from "./components/TopBar";
 import { WalletContext } from "./context/WalletContext";
 import { getCurrentAccountInfo } from "./web3-services/ConnectSigner";
 
+
 function App() {
 	const { setAccount } = useContext(WalletContext);
 	useEffect(() => {
@@ -30,6 +31,7 @@ function App() {
 	return (
 		<>
 			<TopBar />
+			
 		</>
 	);
 }

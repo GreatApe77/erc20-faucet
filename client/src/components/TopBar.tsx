@@ -17,12 +17,18 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 import { WalletContext } from "../context/WalletContext";
 import { formatAddress } from "../utils/formatAddress";
+import LoginModal from "./LoginModal";
+import RegisterModal from "./RegisterModal";
 
 export default function TopBar() {
-	const isMobile = useMediaQuery("(max-width:600px)");
 	const [drawerOpen, setDrawerOpen] = useState(false);
-	const { connectWallet, account } = useContext(WalletContext);
 	const [connectingWallet, setConnectingWallet] = useState(false);
+	const [loginModalOpen, setLoginModalOpen] = useState(false);
+	const [registerModalOpen, setRegisterModalOpen] = useState(false);
+	const isMobile = useMediaQuery("(max-width:600px)");
+	const { connectWallet, account } = useContext(WalletContext);
+	const handleLoginModalOpen = () => setLoginModalOpen(true);
+	const handelRegisterModalOpen = () => setRegisterModalOpen(true);
 	const handleDrawerOpen = () => {
 		setDrawerOpen(true);
 	};
@@ -68,10 +74,18 @@ export default function TopBar() {
 				) : (
 					// If not mobile, display buttons on the right
 					<Box sx={{ display: "flex", alignItems: "center" }}>
-						<Button color="primary" variant="contained">
+						<Button
+							onClick={handleLoginModalOpen}
+							color="primary"
+							variant="contained"
+						>
 							Login
 						</Button>
-						<Button color="primary" variant="text">
+						<Button
+							onClick={handelRegisterModalOpen}
+							color="primary"
+							variant="text"
+						>
 							Register
 						</Button>
 						<Button
@@ -84,7 +98,7 @@ export default function TopBar() {
 								formatAddress(account)
 							) : connectingWallet ? (
 								<>
-                  Connecting...
+									Connecting...
 									<CircularProgress size={20} />
 								</>
 							) : (
@@ -97,15 +111,31 @@ export default function TopBar() {
 				{/* Drawer for mobile */}
 				<Drawer anchor="right" open={drawerOpen} onClose={handleDrawerClose}>
 					<List>
-						<ListItemButton onClick={handleDrawerClose}>
+						<ListItemButton
+							onClick={() => {
+								handleDrawerClose();
+								handleLoginModalOpen();
+							}}
+						>
 							<ListItemText primary="Login" />
 						</ListItemButton>
-						<ListItemButton onClick={handleDrawerClose}>
+						<ListItemButton
+							onClick={() => {
+								handleDrawerClose();
+								handelRegisterModalOpen();
+							}}
+						>
 							<ListItemText primary="Register" />
 						</ListItemButton>
 						<ListItemButton onClick={handleMobileConnectWallet}>
 							<ListItemText
-								secondary={account ? formatAddress(account) : ""}
+								secondary={account ? <>
+                <Box sx={{display:"flex", alignItems:"center"}}>
+
+                <Avatar  src="/MetaMask_Fox.svg" />
+                {formatAddress(account)}
+                </Box>
+                </> : ""}
 								primary={
 									account ? (
 										"Connected as:"
@@ -123,6 +153,8 @@ export default function TopBar() {
 					</List>
 				</Drawer>
 			</Toolbar>
+			<LoginModal open={loginModalOpen} setOpen={setLoginModalOpen} />
+			<RegisterModal open={registerModalOpen} setOpen={setRegisterModalOpen} />
 		</AppBar>
 	);
 }

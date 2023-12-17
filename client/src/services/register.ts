@@ -1,10 +1,11 @@
+import { SERVER_URL } from "../constants/server-url";
 import { ApiResponse } from "../types/ApiResponse";
 import { LoggingUser } from "../types/User";
 
 export async function register({ nickname, password }: LoggingUser) {
     if(!nickname || !password) throw new Error("Invalid nickname or password")
     try {
-        const response = await fetch("/api/register", {
+        const response = await fetch(`${SERVER_URL}/users/register`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
