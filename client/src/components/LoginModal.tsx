@@ -21,21 +21,33 @@ const style = {
 type Props = {
 	open: boolean;
 	setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-	
 };
 export default function LoginModal({ open, setOpen }: Props) {
-	
 	const handleClose = () => setOpen(false);
-	const [user, setUser] = React.useState<LoggingUser>({ nickname: "", password: "" });
+	const [user, setUser] = React.useState<LoggingUser>({
+		nickname: "",
+		password: "",
+	});
+	const [message, setMessage] = React.useState<string>("");
 
 	const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 		console.log(user);
+		if(user.nickname.length<3 || user.password.length<8){
+			setMessage("Nickname precisa ter pelo menos 3 caracteres e senha 8");
+			return;
+		}
 		login(user)
 			.then((res) => {
-				console.log(res);
-				localStorage.setItem("token", res.data.token);
-				handleClose();
+				if(res.status===200){
+					console.log(res);
+					localStorage.setItem("token", res.data.token);
+					handleClose();
+
+				}
+				else{
+					setMessage(res.data.message);
+				}
 			})
 			.catch((err) => {
 				console.log(err);
@@ -44,6 +56,7 @@ export default function LoginModal({ open, setOpen }: Props) {
 
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = event.target;
+		
 		setUser((prevUser) => ({ ...prevUser, [name]: value } as LoggingUser));
 	};
 
@@ -60,14 +73,14 @@ export default function LoginModal({ open, setOpen }: Props) {
 						Login to Faucet Account
 					</Typography>
 					<form onSubmit={handleSubmit}>
-						<Box >
+						<Box>
 							<TextField
 								name="nickname"
 								onChange={handleChange}
 								id="standard-basic"
 								label="Nickname"
 								variant="standard"
-                                sx={{width: "100%", marginBottom: "1rem"}}
+								sx={{ width: "100%", marginBottom: "1rem" }}
 							/>
 							<TextField
 								name="password"
@@ -77,12 +90,20 @@ export default function LoginModal({ open, setOpen }: Props) {
 								type="password"
 								autoComplete="current-password"
 								variant="standard"
-                                sx={{width: "100%",marginBottom: "1rem"}}
+								sx={{ width: "100%", marginBottom: "1rem" }}
+								required
 							/>
 						</Box>
 						<Button variant="contained" type="submit">
 							Login
 						</Button>
+						<Typography
+							id="modal-modal-description"
+							sx={{ mt: 2 }}
+						>
+						{message?message:""}
+
+						</Typography>
 					</form>
 				</Box>
 			</Modal>

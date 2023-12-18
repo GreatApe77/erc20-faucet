@@ -25,14 +25,24 @@ type Props = {
 export default function RegisterModal({ open, setOpen }: Props) {
 	const handleClose = () => setOpen(false);
 	const [user, setUser] = useState<LoggingUser>({ nickname: "", password: "" });
-
+	const [message, setMessage] = useState<string>("");
 	const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 		console.log(user);
+		if(user.nickname.length<3 || user.password.length<8){
+			setMessage("Nickname precisa ter pelo menos 3 caracteres e senha 8");
+			return;
+		}
 		register(user)
 			.then((res) => {
-				console.log(res);
-				handleClose();
+				if(res.status===201){
+					console.log(res);
+					localStorage.setItem("token", res.data.token);
+					handleClose();
+				}
+				else{
+					setMessage(res.data.message);
+				}
 			})
 			.catch((err) => {
 				console.log(err);
@@ -82,6 +92,9 @@ export default function RegisterModal({ open, setOpen }: Props) {
 						<Button variant="contained" type="submit" >
 							Register
 						</Button>
+						<Typography id="modal-modal-description" sx={{ mt: 2 }}>
+							{message}
+						</Typography>
 					</form>
 				</Box>
 			</Modal>
