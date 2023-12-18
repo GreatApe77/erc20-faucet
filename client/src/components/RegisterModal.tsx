@@ -1,9 +1,10 @@
-import * as React from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
-import { FormControl, TextField } from "@mui/material";
+import {  TextField } from "@mui/material";
+import { useState } from "react";
+import { LoggingUser } from "../types/User";
 
 const style = {
 	position: "absolute" as "absolute",
@@ -19,10 +20,20 @@ const style = {
 type Props = {
 	open: boolean;
 	setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-
 };
 export default function RegisterModal({ open, setOpen }: Props) {
 	const handleClose = () => setOpen(false);
+	const [user, setUser] = useState<LoggingUser>({ nickname: "", password: "" });
+
+	const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+		event.preventDefault();
+		console.log(user);
+	};
+
+	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		const { name, value } = event.target;
+		setUser((prevUser) => ({ ...prevUser, [name]: value } as LoggingUser));
+	};
 
 	return (
 		<>
@@ -36,27 +47,33 @@ export default function RegisterModal({ open, setOpen }: Props) {
 					<Typography id="modal-modal-title" variant="h4" component="h2">
 						Register for Faucet
 					</Typography>
-					<FormControl>
-						<Box >
+					<form onSubmit={handleSubmit}>
+						<Box>
 							<TextField
+								name="nickname"
+								onChange={handleChange}
 								id="standard-basic"
 								label="Nickname"
 								variant="standard"
-                                sx={{width: "100%", marginBottom: "1rem"}}
+								sx={{ width: "100%", marginBottom: "1rem" }}
+								required
 							/>
 							<TextField
+								name="password"
+								onChange={handleChange}
 								id="standard-password-input"
 								label="Password"
 								type="password"
 								autoComplete="current-password"
 								variant="standard"
-                                sx={{width: "100%",marginBottom: "1rem"}}
+								sx={{ width: "100%", marginBottom: "1rem" }}
+								required
 							/>
 						</Box>
-						<Button variant="contained" onClick={handleClose}>
+						<Button variant="contained" type="submit" >
 							Register
 						</Button>
-					</FormControl>
+					</form>
 				</Box>
 			</Modal>
 		</>

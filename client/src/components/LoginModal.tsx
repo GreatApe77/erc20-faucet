@@ -4,6 +4,7 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import { FormControl, TextField } from "@mui/material";
+import { LoggingUser } from "../types/User";
 
 const style = {
 	position: "absolute" as "absolute",
@@ -24,6 +25,17 @@ type Props = {
 export default function LoginModal({ open, setOpen }: Props) {
 	
 	const handleClose = () => setOpen(false);
+	const [user, setUser] = React.useState<LoggingUser>({ nickname: "", password: "" });
+
+	const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+		event.preventDefault();
+		console.log(user);
+	};
+
+	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		const { name, value } = event.target;
+		setUser((prevUser) => ({ ...prevUser, [name]: value } as LoggingUser));
+	};
 
 	return (
 		<>
@@ -37,15 +49,19 @@ export default function LoginModal({ open, setOpen }: Props) {
 					<Typography id="modal-modal-title" variant="h4" component="h2">
 						Login to Faucet Account
 					</Typography>
-					<FormControl>
+					<form onSubmit={handleSubmit}>
 						<Box >
 							<TextField
+								name="nickname"
+								onChange={handleChange}
 								id="standard-basic"
 								label="Nickname"
 								variant="standard"
                                 sx={{width: "100%", marginBottom: "1rem"}}
 							/>
 							<TextField
+								name="password"
+								onChange={handleChange}
 								id="standard-password-input"
 								label="Password"
 								type="password"
@@ -54,10 +70,10 @@ export default function LoginModal({ open, setOpen }: Props) {
                                 sx={{width: "100%",marginBottom: "1rem"}}
 							/>
 						</Box>
-						<Button variant="contained" onClick={handleClose}>
+						<Button variant="contained" type="submit">
 							Login
 						</Button>
-					</FormControl>
+					</form>
 				</Box>
 			</Modal>
 		</>
