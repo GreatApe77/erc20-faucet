@@ -5,6 +5,7 @@ import Modal from "@mui/material/Modal";
 import {  TextField } from "@mui/material";
 import { useState } from "react";
 import { LoggingUser } from "../types/User";
+import { register } from "../services/register";
 
 const style = {
 	position: "absolute" as "absolute",
@@ -28,6 +29,14 @@ export default function RegisterModal({ open, setOpen }: Props) {
 	const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 		console.log(user);
+		register(user)
+			.then((res) => {
+				console.log(res);
+				handleClose();
+			})
+			.catch((err) => {
+				console.log(err);
+			});
 	};
 
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
