@@ -5,6 +5,7 @@ import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import { FormControl, TextField } from "@mui/material";
 import { LoggingUser } from "../types/User";
+import { login } from "../services/login";
 
 const style = {
 	position: "absolute" as "absolute",
@@ -30,6 +31,15 @@ export default function LoginModal({ open, setOpen }: Props) {
 	const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 		console.log(user);
+		login(user)
+			.then((res) => {
+				console.log(res);
+				localStorage.setItem("token", res.data.token);
+				handleClose();
+			})
+			.catch((err) => {
+				console.log(err);
+			});
 	};
 
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
