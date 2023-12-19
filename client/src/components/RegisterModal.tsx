@@ -23,9 +23,13 @@ type Props = {
 	setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 export default function RegisterModal({ open, setOpen }: Props) {
-	const handleClose = () => setOpen(false);
+
 	const [user, setUser] = useState<LoggingUser>({ nickname: "", password: "" });
 	const [message, setMessage] = useState<string>("");
+	const handleClose = () => {
+		setOpen(false)
+		setMessage("")
+	};
 	const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 		console.log(user);

@@ -3,7 +3,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
-import { FormControl, TextField } from "@mui/material";
+import {  TextField } from "@mui/material";
 import { LoggingUser } from "../types/User";
 import { login } from "../services/login";
 
@@ -23,29 +23,29 @@ type Props = {
 	setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 export default function LoginModal({ open, setOpen }: Props) {
-	const handleClose = () => setOpen(false);
 	const [user, setUser] = React.useState<LoggingUser>({
 		nickname: "",
 		password: "",
 	});
 	const [message, setMessage] = React.useState<string>("");
-
+	const handleClose = () => {
+		setOpen(false);
+		setMessage("");
+	};
 	const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 		console.log(user);
-		if(user.nickname.length<3 || user.password.length<8){
+		if (user.nickname.length < 3 || user.password.length < 8) {
 			setMessage("Nickname precisa ter pelo menos 3 caracteres e senha 8");
 			return;
 		}
 		login(user)
 			.then((res) => {
-				if(res.status===200){
+				if (res.status === 200) {
 					console.log(res);
 					localStorage.setItem("token", res.data.token);
 					handleClose();
-
-				}
-				else{
+				} else {
 					setMessage(res.data.message);
 				}
 			})
@@ -56,7 +56,7 @@ export default function LoginModal({ open, setOpen }: Props) {
 
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = event.target;
-		
+
 		setUser((prevUser) => ({ ...prevUser, [name]: value } as LoggingUser));
 	};
 
@@ -97,15 +97,12 @@ export default function LoginModal({ open, setOpen }: Props) {
 						<Button variant="contained" type="submit">
 							Login
 						</Button>
-						<Typography
-							id="modal-modal-description"
-							sx={{ mt: 2 }}
-						>
-						{message?message:""}
-
+						<Typography color="red" id="modal-modal-description" sx={{ mt: 2 }}>
+							{message ? message : ""}
 						</Typography>
 					</form>
 				</Box>
+				
 			</Modal>
 		</>
 	);
