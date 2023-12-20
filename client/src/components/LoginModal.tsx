@@ -116,7 +116,7 @@ export default function LoginModal({ open, setOpen }: Props) {
 								required
 							/>
 						</Box>
-						<Button variant="contained" type="submit">
+						<Button disabled={loading} variant="contained" type="submit">
 						{loading ? (
 								<CircularProgress color="inherit" size={20} />
 							) : (
