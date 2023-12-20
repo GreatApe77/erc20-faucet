@@ -14,7 +14,7 @@
   "license": "ISC",
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "^4.0.0",
-    "deployment-history": "^1.0.6",
+    "deployment-history": "^2.0.4",
     "hardhat": "^2.19.1",
     "solidity-docgen": "^0.6.0-beta.36"
   },
