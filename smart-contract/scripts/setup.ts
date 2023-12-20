@@ -17,10 +17,11 @@ async function main(){
     const response = await greatApe77Coin.transfer(await faucetBank.getAddress(),ethers.parseEther("777"))
     await response.wait()
     const address = await faucetBank.getAddress()
-    console.log(`Bank address: ${address}`)
-    console.log(`GreatApe77Coin address: ${await greatApe77Coin.getAddress()}`)
-    saveDeployment(`GreatApe77Coin: ${await greatApe77Coin.getAddress()}`,network.name)
-    saveDeployment(`FaucetBank: ${address}`,network.name)
+   
+    //saveDeployment(`GreatApe77Coin: ${await greatApe77Coin.getAddress()}`,network.name)
+    //saveDeployment(`FaucetBank: ${address}`,network.name)
+    saveDeployment(address, 'FaucetBank', network.name)
+    saveDeployment(await greatApe77Coin.getAddress(), 'GreatApe77Coin', network.name)
 }
 
 main().catch((error) => {
