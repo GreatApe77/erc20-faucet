@@ -53,7 +53,7 @@ export default function RegisterModal({ open, setOpen }: Props) {
 			.then((res) => {
 				if (res.status === 201) {
 					console.log(res);
-					localStorage.setItem("token", res.data.token);
+					//localStorage.setItem("token", res.data.token);
 					//setMessage(res.data.message as string);
 					setResponseMessage(res.data.message as string);
 					setOpenSnackbar(true);

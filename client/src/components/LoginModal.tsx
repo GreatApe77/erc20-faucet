@@ -3,9 +3,10 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
-import {  TextField } from "@mui/material";
+import {  Alert, AlertTitle, CircularProgress, Snackbar, TextField } from "@mui/material";
 import { LoggingUser } from "../types/User";
 import { login } from "../services/login";
+import { useState } from "react";
 
 const style = {
 	position: "absolute" as "absolute",
@@ -28,32 +29,53 @@ export default function LoginModal({ open, setOpen }: Props) {
 		password: "",
 	});
 	const [message, setMessage] = React.useState<string>("");
+	const [responseMessage, setResponseMessage] = useState<string>("");
+	const [loading, setLoading] = useState<boolean>(false);
+	const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
+	const [severity, setSeverity] = useState<"success" | "error" | "info" | "warning" | undefined>("success");
+
 	const handleClose = () => {
 		setOpen(false);
 		setMessage("");
 	};
 	const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
-		console.log(user);
+
 		if (user.nickname.length < 3 || user.password.length < 8) {
 			setMessage("Nickname precisa ter pelo menos 3 caracteres e senha 8");
 			return;
 		}
+		console.log(user);
+		setLoading(true);
 		login(user)
 			.then((res) => {
 				if (res.status === 200) {
 					console.log(res);
 					localStorage.setItem("token", res.data.token);
+					setResponseMessage(res.data.message as string);
+					setSeverity("success");
+					setOpenSnackbar(true);
 					handleClose();
 				} else {
 					setMessage(res.data.message);
+					setSeverity("error");
+					setOpenSnackbar(true);
+					setResponseMessage(res.data.message as string);
 				}
 			})
 			.catch((err) => {
 				console.log(err);
-			});
+			}).finally(()=>{
+				setLoading(false);
+			})
 	};
-
+	const handleSnackBarClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+		if (reason === 'clickaway') {
+		  return;
+		}
+	
+		setOpenSnackbar(false);
+	  };
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = event.target;
 
@@ -95,7 +117,11 @@ export default function LoginModal({ open, setOpen }: Props) {
 							/>
 						</Box>
 						<Button variant="contained" type="submit">
-							Login
+						{loading ? (
+								<CircularProgress color="inherit" size={20} />
+							) : (
+								"Login"
+							)}
 						</Button>
 						<Typography color="red" id="modal-modal-description" sx={{ mt: 2 }}>
 							{message ? message : ""}
@@ -104,6 +130,20 @@ export default function LoginModal({ open, setOpen }: Props) {
 				</Box>
 				
 			</Modal>
+
+			<Snackbar anchorOrigin={{horizontal:"center",vertical:"top"}} open={openSnackbar} autoHideDuration={16000} onClose={handleSnackBarClose}>
+					<Alert
+						variant="filled"
+						onClose={handleSnackBarClose}
+						severity={severity}
+						sx={{ width: "100%" }}
+					>
+						<AlertTitle>{severity?.toUpperCase()}</AlertTitle>
+						{responseMessage}
+					</Alert>
+					
+				</Snackbar>
+				
 		</>
 	);
 }
