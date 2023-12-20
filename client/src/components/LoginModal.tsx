@@ -69,7 +69,7 @@ export default function LoginModal({ open, setOpen }: Props) {
 				setLoading(false);
 			})
 	};
-	const handleSnackBarClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+	const handleSnackBarClose = (_event?: React.SyntheticEvent | Event, reason?: string) => {
 		if (reason === 'clickaway') {
 		  return;
 		}

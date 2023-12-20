@@ -33,7 +33,7 @@ export default function RegisterModal({ open, setOpen }: Props) {
 		setOpen(false);
 		setMessage("");
 	};
-	const handleSnackBarClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+	const handleSnackBarClose = (_event?: React.SyntheticEvent | Event, reason?: string) => {
 		if (reason === 'clickaway') {
 		  return;
 		}
