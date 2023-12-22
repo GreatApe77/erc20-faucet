@@ -1,6 +1,8 @@
 import Typography from "@mui/material/Typography";
-import { Avatar } from "@mui/material";
-
+import { Avatar, Button, ButtonGroup } from "@mui/material";
+import { formatAddress } from "../utils/formatAddress";
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import { useState } from "react";
 type Props = {
 	account?: string;
 	erc20Balance?: string;
@@ -8,6 +10,14 @@ type Props = {
 };
 
 export default function WalletInfo(props: Props) {
+    const [copying, setCopying] = useState<boolean>(false);
+    function handleCopyClick(){
+        setCopying(true);
+        navigator.clipboard.writeText(props.account as string)
+        setTimeout(()=>{
+            setCopying(false);
+        }, 1500)
+    }
 	return (
 		<>
 			{props.account ? (
@@ -23,7 +33,14 @@ export default function WalletInfo(props: Props) {
 						{props.erc20Balance} <Avatar src="/great-ape-psn.png" />
 					</Typography>
 					<Typography color="text.secondary" sx={{ flex: 1 }}>
-						{props.account}
+						{formatAddress(props.account)}
+                        
+                        
+                        <span  onClick={handleCopyClick} >
+
+                        <ContentCopyIcon  fontSize="inherit" color={copying?"primary":"inherit"} sx={{cursor:"pointer"}}  />
+                        </span>
+                        
 					</Typography>
 					<div>
 						<Avatar src="/MetaMask_Fox.svg" />

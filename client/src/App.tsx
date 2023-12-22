@@ -39,6 +39,22 @@ function App() {
 		window.ethereum.on("accountsChanged", (accounts: any) => {
 			setAccount(accounts[0]);
 			localStorage.setItem("account", accounts[0]);
+			if(window.ethereum._metamask.isUnlocked()){
+				getCurrentAccountInfo()
+				.then((accountInformation) => {
+					console.log(accountInformation)
+					
+					setWalletInfo({
+						ethBalance: accountInformation.balance,
+						erc20Balance: accountInformation.greatApe77CoinBalance,
+						account: accountInformation.address
+					})
+					
+				})
+				.catch((err) => {
+					console.error(err);
+				});
+			}
 		});
 	}
 	return (

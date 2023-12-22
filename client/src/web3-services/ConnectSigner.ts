@@ -16,11 +16,18 @@ export async function getCurrentAccountInfo() {
 			provider.getNetwork(),
 			checkERC20Balance(window.ethereum.selectedAddress)
 		]);
+		const mainBalance = ethers.formatUnits(balance, 18).split(".")[0];
+		const decimalBalance = ethers.formatUnits(balance, 18).split(".")[1];
+		const balanceString = `${mainBalance}.${decimalBalance.slice(0, 2)}`;
+		
+		const greatApe77CoinMainBalanceString = ethers.formatUnits(greatApe77CoinBalance, 18).split(".")[0];
+		const greatApe77CoinDecimalBalance = ethers.formatUnits(greatApe77CoinBalance, 18).split(".")[1];
+		const greatApe77CoinBalanceString = `${greatApe77CoinMainBalanceString}.${greatApe77CoinDecimalBalance.slice(0, 2)}`;
         return {
             address: accounts[0],
-            balance: ethers.formatEther(balance),
+            balance: balanceString,
             network: network.chainId,
-			greatApe77CoinBalance: ethers.formatEther(greatApe77CoinBalance)
+			greatApe77CoinBalance: greatApe77CoinBalanceString
         }
 	} catch (error) {
 		console.error(error);
