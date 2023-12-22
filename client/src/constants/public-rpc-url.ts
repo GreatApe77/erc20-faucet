@@ -1,0 +1,1 @@
+export const PUBLIC_RPC_URL =(import.meta.env.VITE_PUBLIC_RPC_URL as string) || "https://rpc.ankr.com/fantom_testnet";

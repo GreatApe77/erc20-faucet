@@ -1,6 +1,6 @@
 import { SERVER_URL } from "../constants/server-url";
 import { ApiResponse } from "../types/ApiResponse";
-import { LoggedUser, LoggingUser } from "../types/User";
+import {  LoggingUser } from "../types/User";
 
 export async function login({ nickname, password }: LoggingUser) {
     if(!nickname || !password) throw new Error("Invalid nickname or password")

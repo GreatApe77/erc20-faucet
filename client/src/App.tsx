@@ -1,13 +1,19 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import TopBar from "./components/TopBar";
 import { WalletContext } from "./context/WalletContext";
 import { getCurrentAccountInfo } from "./web3-services/ConnectSigner";
 import { Container, Grid, Paper } from "@mui/material";
 import WalletInfo from "./components/WalletInfo";
+import { WalletInfo as WalletInfoType } from "./types/WalletInfo";
 
 
 function App() {
 	const { setAccount } = useContext(WalletContext);
+	const [walletInfo, setWalletInfo] = useState({
+		ethBalance: "",
+		erc20Balance: "",
+		account: "",
+	} as WalletInfoType)
 	useEffect(() => {
 		if(window.ethereum){
 			if(window.ethereum._metamask.isUnlocked()){
@@ -15,6 +21,11 @@ function App() {
 				.then((accountInformation) => {
 					console.log(accountInformation)
 					setAccount(accountInformation.address);
+					setWalletInfo({
+						ethBalance: accountInformation.balance,
+						erc20Balance: accountInformation.greatApe77CoinBalance,
+						account: accountInformation.address
+					})
 					
 				})
 				.catch((err) => {
@@ -58,7 +69,10 @@ function App() {
                     height: 240,
                   }}
                 >
-                <WalletInfo/>
+                <WalletInfo account={walletInfo.account}
+								ethBalance={walletInfo.ethBalance}
+								erc20Balance={walletInfo.erc20Balance}
+				/>
                 </Paper>
               </Grid>
               {/* Recent Orders */}
