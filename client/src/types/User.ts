@@ -1,10 +1,10 @@
 export type LoggedUser = {
-	id: string;
-	nickname: string;
-	lastClaimed: number;
-	nextClaim: number;
-	custodyAccountPrivateKey: string;
-	custodyAccountPublicKey: string;
+	id?: string;
+	nickname?: string;
+	lastClaimed?: number;
+	nextClaim?: number;
+	custodyAccountPrivateKey?: string;
+	custodyAccountPublicKey?: string;
 };
 
 

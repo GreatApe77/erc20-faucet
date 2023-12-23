@@ -5,33 +5,53 @@ import { getCurrentAccountInfo } from "./web3-services/ConnectSigner";
 import { Container, Grid, Paper } from "@mui/material";
 import WalletInfo from "./components/WalletInfo";
 import { WalletInfo as WalletInfoType } from "./types/WalletInfo";
+import { fetchLoggedUserData } from "./services/fetchLoggedUserData";
+import { LoggedUser } from "./types/User";
+import { UserContext } from "./context/UserContext";
 
 
 function App() {
 	const { setAccount } = useContext(WalletContext);
+	const {user, setUser} = useContext(UserContext)
 	const [walletInfo, setWalletInfo] = useState({
 		ethBalance: "",
 		erc20Balance: "",
 		account: "",
 	} as WalletInfoType)
+	function loadAccountInformation(){
+		if(window.ethereum._metamask.isUnlocked()){
+			getCurrentAccountInfo()
+			.then((accountInformation) => {
+				console.log(accountInformation)
+				setAccount(accountInformation.address);
+				setWalletInfo({
+					ethBalance: accountInformation.balance,
+					erc20Balance: accountInformation.greatApe77CoinBalance,
+					account: accountInformation.address
+				})
+				
+			})
+			.catch((err) => {
+				console.error(err);
+			});
+		}
+	}
+	function loadUserInformation(){
+		const token = localStorage.getItem("token")
+		if(!token) return
+		fetchLoggedUserData(token)
+		.then((res)=>{
+			console.log(res)
+			const user = res.data.data as LoggedUser
+			setUser(user)
+		})
+		.catch((err)=>{
+			console.error(err)
+		})
+	}
 	useEffect(() => {
 		if(window.ethereum){
-			if(window.ethereum._metamask.isUnlocked()){
-				getCurrentAccountInfo()
-				.then((accountInformation) => {
-					console.log(accountInformation)
-					setAccount(accountInformation.address);
-					setWalletInfo({
-						ethBalance: accountInformation.balance,
-						erc20Balance: accountInformation.greatApe77CoinBalance,
-						account: accountInformation.address
-					})
-					
-				})
-				.catch((err) => {
-					console.error(err);
-				});
-			}
+			loadAccountInformation()
 		}
 		
 	},[])
@@ -39,22 +59,7 @@ function App() {
 		window.ethereum.on("accountsChanged", (accounts: any) => {
 			setAccount(accounts[0]);
 			localStorage.setItem("account", accounts[0]);
-			if(window.ethereum._metamask.isUnlocked()){
-				getCurrentAccountInfo()
-				.then((accountInformation) => {
-					console.log(accountInformation)
-					
-					setWalletInfo({
-						ethBalance: accountInformation.balance,
-						erc20Balance: accountInformation.greatApe77CoinBalance,
-						account: accountInformation.address
-					})
-					
-				})
-				.catch((err) => {
-					console.error(err);
-				});
-			}
+			loadAccountInformation()
 		});
 	}
 	return (
