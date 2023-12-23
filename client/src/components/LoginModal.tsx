@@ -103,6 +103,7 @@ export default function LoginModal({ open, setOpen }: Props) {
 								label="Nickname"
 								variant="standard"
 								sx={{ width: "100%", marginBottom: "1rem" }}
+								required
 							/>
 							<TextField
 								name="password"

@@ -1,5 +1,5 @@
 import Typography from "@mui/material/Typography";
-import { Avatar, Button, ButtonGroup } from "@mui/material";
+import { Avatar } from "@mui/material";
 import { formatAddress } from "../utils/formatAddress";
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { useState } from "react";
