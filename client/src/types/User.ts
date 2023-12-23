@@ -3,6 +3,7 @@ export type LoggedUser = {
 	nickname?: string;
 	lastClaimed?: number;
 	nextClaim?: number;
+	tokenBalance?: bigint;
 	custodyAccountPrivateKey?: string;
 	custodyAccountPublicKey?: string;
 };

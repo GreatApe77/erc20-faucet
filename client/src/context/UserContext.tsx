@@ -2,8 +2,8 @@ import { createContext, useState, Dispatch, SetStateAction } from "react";
 import { LoggedUser } from "../types/User";
 
 type UserContextType = {
-    user: LoggedUser | undefined;
-    setUser: Dispatch<SetStateAction<LoggedUser | undefined>>;
+    user: LoggedUser ;
+    setUser: Dispatch<SetStateAction<LoggedUser >>;
 };
 
 
@@ -12,7 +12,8 @@ type Props = {
 	children: React.ReactNode;
 };
 export const UserProvider = ({ children }: Props) => {
-	const [user, setUser] = useState<LoggedUser>()
+	const [user, setUser] = useState<LoggedUser>({} );
+	
 
 	
 	const contextValue = {
