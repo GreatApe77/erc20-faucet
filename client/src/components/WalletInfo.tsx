@@ -1,5 +1,5 @@
 import Typography from "@mui/material/Typography";
-import { Avatar } from "@mui/material";
+import { Avatar, Snackbar } from "@mui/material";
 import { formatAddress } from "../utils/formatAddress";
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { useState } from "react";
@@ -42,7 +42,11 @@ export default function WalletInfo(props: Props) {
                         </span>
                         
 					</Typography>
-					
+					<Snackbar
+						open={copying}
+						message={"Copied to clipboard"}
+						anchorOrigin={{ horizontal: "left", vertical: "bottom" }}
+					></Snackbar>
 				</>
 			) : (
 				<>

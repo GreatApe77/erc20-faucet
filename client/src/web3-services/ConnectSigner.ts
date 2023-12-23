@@ -1,5 +1,6 @@
 import { ethers } from "ethers";
 import { checkERC20Balance } from "./checkERC20Balance";
+import { formatBalance } from "../utils/formatBalance";
 
 export async function getCurrentAccountInfo() {
 	if (!window.ethereum) {
@@ -16,13 +17,10 @@ export async function getCurrentAccountInfo() {
 			provider.getNetwork(),
 			checkERC20Balance(window.ethereum.selectedAddress)
 		]);
-		const mainBalance = ethers.formatUnits(balance, 18).split(".")[0];
-		const decimalBalance = ethers.formatUnits(balance, 18).split(".")[1];
-		const balanceString = `${mainBalance}.${decimalBalance.slice(0, 2)}`;
+		const balanceString = formatBalance(balance);
 		
-		const greatApe77CoinMainBalanceString = ethers.formatUnits(greatApe77CoinBalance, 18).split(".")[0];
-		const greatApe77CoinDecimalBalance = ethers.formatUnits(greatApe77CoinBalance, 18).split(".")[1];
-		const greatApe77CoinBalanceString = `${greatApe77CoinMainBalanceString}.${greatApe77CoinDecimalBalance.slice(0, 2)}`;
+		
+		const greatApe77CoinBalanceString = formatBalance(greatApe77CoinBalance);
         return {
             address: accounts[0],
             balance: balanceString,

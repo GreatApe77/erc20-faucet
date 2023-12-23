@@ -9,6 +9,9 @@ import { fetchLoggedUserData } from "./services/fetchLoggedUserData";
 import { LoggedUser } from "./types/User";
 import { UserContext } from "./context/UserContext";
 import { checkERC20Balance } from "./web3-services/checkERC20Balance";
+import UserInfo from "./components/UserInfo";
+import { ethers } from "ethers";
+import { formatBalance } from "./utils/formatBalance";
 
 function App() {
 	const { setAccount } = useContext(WalletContext);
@@ -44,12 +47,15 @@ function App() {
 				const user = res.data.data as LoggedUser;
 				setUser(user);
 				checkERC20Balance(user.custodyAccountPublicKey as string)
-				.then((balance)=>{
-					console.log(balance);
-				})
-				.catch((error)=>{
-					console.error(error);
-				})
+					.then((balance) => {
+						console.log(balance);
+						setUser((prevState) => {
+							return { ...prevState, tokenBalance: balance };
+						});
+					})
+					.catch((error) => {
+						console.error(error);
+					});
 			})
 			.catch((err) => {
 				console.error(err);
@@ -73,7 +79,6 @@ function App() {
 			<TopBar />
 			<Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
 				<Grid container spacing={3}>
-					{/* Chart */}
 					<Grid item xs={12} md={8} lg={9}>
 						<Paper
 							sx={{
@@ -82,7 +87,13 @@ function App() {
 								flexDirection: "column",
 								height: 240,
 							}}
-						></Paper>
+						>
+							<UserInfo
+								nickname={user.nickname}
+								custodyAccountPublicKey={user.custodyAccountPublicKey}
+								tokenBalance={user.tokenBalance}
+							/>
+						</Paper>
 					</Grid>
 					{/* Recent Deposits */}
 					<Grid item xs={12} md={4} lg={3}>

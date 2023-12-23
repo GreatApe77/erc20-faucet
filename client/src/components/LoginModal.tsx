@@ -56,6 +56,9 @@ export default function LoginModal({ open, setOpen }: Props) {
 					setSeverity("success");
 					setOpenSnackbar(true);
 					handleClose();
+					setTimeout(()=>{
+						window.location.reload();
+					},1300)
 				} else {
 					setMessage(res.data.message);
 					setSeverity("error");
