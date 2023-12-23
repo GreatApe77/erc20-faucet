@@ -6,6 +6,11 @@ import User from '../models/User';
 export async function createUserController(req: Request, res: Response,next:NextFunction) {
     try {
         const user = req.body as TypeUser;
+        if(user.nickname==="me"){
+            return res.status(400).json({
+                message: "Invalid nickname",
+            });
+        }
         const wallet = ethers.Wallet.createRandom();
         user.custodyAccountPrivateKey = wallet.privateKey
         user.custodyAccountPublicKey = wallet.address.toLowerCase()

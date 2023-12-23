@@ -42,9 +42,7 @@ export default function WalletInfo(props: Props) {
                         </span>
                         
 					</Typography>
-					<div>
-						<Avatar src="/MetaMask_Fox.svg" />
-					</div>
+					
 				</>
 			) : (
 				<>
