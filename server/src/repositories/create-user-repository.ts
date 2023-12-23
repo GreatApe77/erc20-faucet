@@ -8,15 +8,19 @@ import User from "../models/User";
  * @returns Usuário criado
  */
 export async function createUserRepository(user: TypeUser){
-
-    const newUser = new User({
-        nickname: user.nickname,
-        password: user.password,
-        custodyAccountPublicKey: user.custodyAccountPublicKey,
-        custodyAccountPrivateKey: user.custodyAccountPrivateKey,
-        lastClaimed: user.lastClaimed,
-        nextClaim: user.nextClaim,
-    }as TypeUser);
-    await newUser.save()
-    return newUser
+    try {
+        const newUser = new User({
+            nickname: user.nickname,
+            password: user.password,
+            custodyAccountPublicKey: user.custodyAccountPublicKey,
+            custodyAccountPrivateKey: user.custodyAccountPrivateKey,
+            lastClaimed: user.lastClaimed,
+            nextClaim: user.nextClaim,
+        }as TypeUser);
+        await newUser.save()
+        return newUser
+    } catch (error:any) {
+        throw new Error(error.message)
+    }
+   
 }
