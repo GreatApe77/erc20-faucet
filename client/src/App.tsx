@@ -10,8 +10,7 @@ import { LoggedUser } from "./types/User";
 import { UserContext } from "./context/UserContext";
 import { checkERC20Balance } from "./web3-services/checkERC20Balance";
 import UserInfo from "./components/UserInfo";
-import { ethers } from "ethers";
-import { formatBalance } from "./utils/formatBalance";
+
 
 function App() {
 	const { setAccount } = useContext(WalletContext);
