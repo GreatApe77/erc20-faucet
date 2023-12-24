@@ -1,8 +1,27 @@
-import { useContext, useEffect, useState } from "react";
+import {
+	FormEvent,
+	ReactEventHandler,
+	ReactHTMLElement,
+	SyntheticEvent,
+	useContext,
+	useEffect,
+	useState,
+} from "react";
 import TopBar from "./components/TopBar";
 import { WalletContext } from "./context/WalletContext";
 import { getCurrentAccountInfo } from "./web3-services/ConnectSigner";
-import { Container, Grid, Paper } from "@mui/material";
+import {
+	Box,
+	Button,
+	Checkbox,
+	CircularProgress,
+	Container,
+	FormControlLabel,
+	Grid,
+	Paper,
+	TextField,
+	Typography,
+} from "@mui/material";
 import WalletInfo from "./components/WalletInfo";
 import { WalletInfo as WalletInfoType } from "./types/WalletInfo";
 import { fetchLoggedUserData } from "./services/fetchLoggedUserData";
@@ -10,11 +29,14 @@ import { LoggedUser } from "./types/User";
 import { UserContext } from "./context/UserContext";
 import { checkERC20Balance } from "./web3-services/checkERC20Balance";
 import UserInfo from "./components/UserInfo";
-
+import { CheckBox } from "@mui/icons-material";
+import { claimFaucets } from "./services/claimFaucets";
 
 function App() {
-	const { setAccount } = useContext(WalletContext);
+	const { setAccount, account } = useContext(WalletContext);
 	const { user, setUser } = useContext(UserContext);
+	const [useConnectedWallet, setUseConnectedWallet] = useState(false);
+	const [loading, setLoading] = useState(false);
 	const [walletInfo, setWalletInfo] = useState({
 		ethBalance: "",
 		erc20Balance: "",
@@ -60,6 +82,9 @@ function App() {
 				console.error(err);
 			});
 	}
+	const handleCheckClick = () => {
+		setUseConnectedWallet((prevState) => !prevState);
+	};
 	useEffect(() => {
 		loadUserInformation();
 		if (window.ethereum) {
@@ -73,6 +98,30 @@ function App() {
 			loadAccountInformation();
 		});
 	}
+	function handleClaimFaucetsSubmit(event: FormEvent<HTMLFormElement>): void {
+		event.preventDefault();
+		
+		const walletToUse = useConnectedWallet ? account : user.custodyAccountPublicKey;
+		if (!walletToUse) return;
+		const token = localStorage.getItem("token");
+		if (!token) return;
+		setLoading(true);
+		claimFaucets(walletToUse, useConnectedWallet,token)
+			.then((res) => {
+				if(res.status === 200){
+					loadUserInformation();
+				}else{
+					alert(`Code: ${res.status} - ${res.data.message}`)
+				}
+			})
+			.catch((err) => {
+				console.error(err);
+			})
+			.finally(() => {
+				setLoading(false);
+			});
+	}
+
 	return (
 		<>
 			<TopBar />
@@ -113,9 +162,53 @@ function App() {
 					</Grid>
 					{/* Recent Orders */}
 					<Grid item xs={12}>
-						<Paper
-							sx={{ p: 2, display: "flex", flexDirection: "column" }}
-						></Paper>
+						<Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
+							<Container>
+								<Box>
+									<Typography variant="h4" marginBottom={"2rem"} component="h2">
+										Claim Faucets
+									</Typography>
+								</Box>
+								<form onSubmit={handleClaimFaucetsSubmit}>
+									<Box
+										sx={{
+											display: "flex",
+											flexDirection: "column",
+											gap: "1rem",
+										}}
+									>
+										<TextField
+											fullWidth
+											id="fullWidth"
+											value={
+												useConnectedWallet
+													? account
+													: user.custodyAccountPublicKey
+											}
+										></TextField>
+										<FormControlLabel
+											onChange={handleCheckClick}
+											disabled={!Boolean(account)}
+											control={<Checkbox />}
+											label="Use your connected wallet?"
+										/>
+
+										<Button
+											size="large"
+											type="submit"
+											variant="contained"
+											fullWidth
+											color="primary"
+											disabled={loading}
+										>
+											{
+												loading ? <CircularProgress color="inherit" /> : "Claim Faucets"
+											}
+										</Button>
+									</Box>
+								</form>
+							</Container>
+						</Paper>
 					</Grid>
 				</Grid>
 			</Container>
