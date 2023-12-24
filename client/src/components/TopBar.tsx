@@ -48,6 +48,23 @@ export default function TopBar() {
 			setConnectingWallet(false);
 		});
 	}
+
+	async function logout() {
+		localStorage.removeItem("token");
+		//window.location.reload();
+		if (window.ethereum) {
+			try {
+				await window.ethereum.request({
+					method: "wallet_revokePermissions",
+					params: [{ "eth_accounts": {} }],
+				});	
+			} catch (error) {
+				window.location.reload();
+			}
+			
+		}
+		window.location.reload();
+	}
 	return (
 		<AppBar color="transparent" position="static">
 			<Toolbar sx={{ justifyContent: "space-between" }}>
@@ -87,6 +104,9 @@ export default function TopBar() {
 							variant="text"
 						>
 							Register
+						</Button>
+						<Button onClick={logout} color="warning" variant="text">
+							Logout
 						</Button>
 						<Button
 							onClick={handleConnectWallet}
@@ -129,13 +149,18 @@ export default function TopBar() {
 						</ListItemButton>
 						<ListItemButton onClick={handleMobileConnectWallet}>
 							<ListItemText
-								secondary={account ? <>
-                <Box sx={{display:"flex", alignItems:"center"}}>
-
-                <Avatar  src="/MetaMask_Fox.svg" />
-                {formatAddress(account)}
-                </Box>
-                </> : ""}
+								secondary={
+									account ? (
+										<>
+											<Box sx={{ display: "flex", alignItems: "center" }}>
+												<Avatar src="/MetaMask_Fox.svg" />
+												{formatAddress(account)}
+											</Box>
+										</>
+									) : (
+										""
+									)
+								}
 								primary={
 									account ? (
 										"Connected as:"
