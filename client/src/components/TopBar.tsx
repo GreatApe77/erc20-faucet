@@ -56,12 +56,11 @@ export default function TopBar() {
 			try {
 				await window.ethereum.request({
 					method: "wallet_revokePermissions",
-					params: [{ "eth_accounts": {} }],
-				});	
+					params: [{ eth_accounts: {} }],
+				});
 			} catch (error) {
 				window.location.reload();
 			}
-			
 		}
 		window.location.reload();
 	}
@@ -79,7 +78,6 @@ export default function TopBar() {
 				</Box>
 
 				{isMobile ? (
-					// If mobile, display hamburger menu on the right
 					<IconButton
 						edge="end"
 						color="inherit"
@@ -89,7 +87,6 @@ export default function TopBar() {
 						<MenuIcon />
 					</IconButton>
 				) : (
-					// If not mobile, display buttons on the right
 					<Box sx={{ display: "flex", alignItems: "center" }}>
 						<Button
 							onClick={handleLoginModalOpen}
@@ -128,7 +125,6 @@ export default function TopBar() {
 					</Box>
 				)}
 
-				{/* Drawer for mobile */}
 				<Drawer anchor="right" open={drawerOpen} onClose={handleDrawerClose}>
 					<List>
 						<ListItemButton
@@ -138,6 +134,12 @@ export default function TopBar() {
 							}}
 						>
 							<ListItemText primary="Login" />
+						</ListItemButton>
+						
+						<ListItemButton
+							onClick={logout}
+						>
+							<ListItemText primary="Logout" />
 						</ListItemButton>
 						<ListItemButton
 							onClick={() => {

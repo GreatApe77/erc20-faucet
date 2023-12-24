@@ -37,6 +37,7 @@ function App() {
 	const { user, setUser } = useContext(UserContext);
 	const [useConnectedWallet, setUseConnectedWallet] = useState(false);
 	const [loading, setLoading] = useState(false);
+	
 	const [walletInfo, setWalletInfo] = useState({
 		ethBalance: "",
 		erc20Balance: "",
@@ -180,11 +181,13 @@ function App() {
 										<TextField
 											fullWidth
 											id="fullWidth"
+											disabled={user.custodyAccountPublicKey ? false : true}
 											value={
 												useConnectedWallet
 													? account
 													: user.custodyAccountPublicKey
 											}
+											
 										></TextField>
 										<FormControlLabel
 											onChange={handleCheckClick}
