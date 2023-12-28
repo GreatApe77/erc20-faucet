@@ -1,12 +1,4 @@
-import {
-	FormEvent,
-	ReactEventHandler,
-	ReactHTMLElement,
-	SyntheticEvent,
-	useContext,
-	useEffect,
-	useState,
-} from "react";
+import { FormEvent, useContext, useEffect, useState } from "react";
 import TopBar from "./components/TopBar";
 import { WalletContext } from "./context/WalletContext";
 import { getCurrentAccountInfo } from "./web3-services/ConnectSigner";
@@ -41,7 +33,9 @@ function App() {
 	const [useConnectedWallet, setUseConnectedWallet] = useState(false);
 	const [loading, setLoading] = useState(false);
 	const [openSnackbar, setOpenSnackbar] = useState(false);
-	const [severity, setSeverity] = useState<"success" | "error" | "info" | "warning" | undefined>();
+	const [severity, setSeverity] = useState<
+		"success" | "error" | "info" | "warning" | undefined
+	>();
 	const [responseMessage, setResponseMessage] = useState<string>("");
 	const [walletInfo, setWalletInfo] = useState({
 		ethBalance: "",
@@ -106,20 +100,22 @@ function App() {
 	}
 	function handleClaimFaucetsSubmit(event: FormEvent<HTMLFormElement>): void {
 		event.preventDefault();
-		
-		const walletToUse = useConnectedWallet ? account : user.custodyAccountPublicKey;
+
+		const walletToUse = useConnectedWallet
+			? account
+			: user.custodyAccountPublicKey;
 		if (!walletToUse) return;
 		const token = localStorage.getItem("token");
 		if (!token) return;
 		setLoading(true);
-		claimFaucets(walletToUse, useConnectedWallet,token)
+		claimFaucets(walletToUse, useConnectedWallet, token)
 			.then((res) => {
-				if(res.status === 200){
+				if (res.status === 200) {
 					setSeverity("success");
 					setResponseMessage(res.data.message);
 					setOpenSnackbar(true);
 					//loadUserInformation();
-				}else{
+				} else {
 					//alert(`Code: ${res.status} - ${res.data.message}`)
 					setSeverity("error");
 					setResponseMessage(res.data.message);
@@ -133,13 +129,16 @@ function App() {
 				setLoading(false);
 			});
 	}
-	const handleSnackBarClose = (_event?: React.SyntheticEvent | Event, reason?: string) => {
-		if (reason === 'clickaway') {
-		  return;
+	const handleSnackBarClose = (
+		_event?: React.SyntheticEvent | Event,
+		reason?: string
+	) => {
+		if (reason === "clickaway") {
+			return;
 		}
-	
+
 		setOpenSnackbar(false);
-	  };
+	};
 	return (
 		<>
 			<TopBar />
@@ -161,7 +160,6 @@ function App() {
 							/>
 						</Paper>
 					</Grid>
-					{/* Recent Deposits */}
 					<Grid item xs={12} md={4} lg={3}>
 						<Paper
 							sx={{
@@ -178,7 +176,6 @@ function App() {
 							/>
 						</Paper>
 					</Grid>
-					{/* Recent Orders */}
 					<Grid item xs={12}>
 						<Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
 							<Container>
@@ -204,7 +201,6 @@ function App() {
 													? account
 													: user.custodyAccountPublicKey
 											}
-											
 										></TextField>
 										<FormControlLabel
 											onChange={handleCheckClick}
@@ -221,9 +217,11 @@ function App() {
 											color="primary"
 											disabled={loading || !user.custodyAccountPublicKey}
 										>
-											{
-												loading ? <CircularProgress color="inherit" /> : "Claim Faucets"
-											}
+											{loading ? (
+												<CircularProgress color="inherit" />
+											) : (
+												"Claim Faucets"
+											)}
 										</Button>
 									</Box>
 								</form>
@@ -232,18 +230,22 @@ function App() {
 					</Grid>
 				</Grid>
 			</Container>
-			<Snackbar anchorOrigin={{horizontal:"center",vertical:"top"}} open={openSnackbar} autoHideDuration={8000} onClose={handleSnackBarClose}>
-					<Alert
-						variant="filled"
-						onClose={handleSnackBarClose}
-						severity={severity}
-						sx={{ width: "100%" }}
-					>
-						<AlertTitle>{severity?.toUpperCase()}</AlertTitle>
-						{responseMessage}
-					</Alert>
-					
-				</Snackbar>
+			<Snackbar
+				anchorOrigin={{ horizontal: "center", vertical: "top" }}
+				open={openSnackbar}
+				autoHideDuration={8000}
+				onClose={handleSnackBarClose}
+			>
+				<Alert
+					variant="filled"
+					onClose={handleSnackBarClose}
+					severity={severity}
+					sx={{ width: "100%" }}
+				>
+					<AlertTitle>{severity?.toUpperCase()}</AlertTitle>
+					{responseMessage}
+				</Alert>
+			</Snackbar>
 		</>
 	);
 }
