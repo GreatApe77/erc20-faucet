@@ -5,9 +5,11 @@ import { useState } from "react";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { formatBalance } from "../utils/formatBalance";
 
+
 type UserInfoProps = LoggedUser;
 export default function UserInfo(props: UserInfoProps) {
 	const [copying, setCopying] = useState<boolean>(false);
+	
 	function handleCopyClick() {
 		setCopying(true);
 		navigator.clipboard.writeText(props.custodyAccountPublicKey as string);

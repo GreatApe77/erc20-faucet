@@ -1,8 +1,9 @@
 import Typography from "@mui/material/Typography";
-import { Avatar, Snackbar } from "@mui/material";
+import { Avatar, Button, CircularProgress, Snackbar } from "@mui/material";
 import { formatAddress } from "../utils/formatAddress";
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { useState } from "react";
+import { importTokens } from "../web3-services/importTokens";
 type Props = {
 	account?: string;
 	erc20Balance?: string;
@@ -11,6 +12,14 @@ type Props = {
 
 export default function WalletInfo(props: Props) {
     const [copying, setCopying] = useState<boolean>(false);
+	const [importingLoading, setImportingLoading] = useState<boolean>(false);
+	function handleImportClick() {
+		setImportingLoading(true);
+		importTokens()
+		.finally(() => {
+			setImportingLoading(false);
+		})
+	}
     function handleCopyClick(){
         setCopying(true);
         navigator.clipboard.writeText(props.account as string)
@@ -42,6 +51,12 @@ export default function WalletInfo(props: Props) {
                         </span>
                         
 					</Typography>
+					<Button onClick={handleImportClick}>
+						{importingLoading ? (
+							<CircularProgress />
+						) : (
+							"Import Token")}
+					</Button>
 					<Snackbar
 						open={copying}
 						message={"Copied to clipboard"}
