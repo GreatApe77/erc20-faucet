@@ -64,6 +64,7 @@ function App() {
 		if (!token) return;
 		fetchLoggedUserData(token)
 			.then((res) => {
+				if(res.status !== 200) return;
 				console.log(res);
 				const user = res.data.data as LoggedUser;
 				setUser(user);
@@ -153,6 +154,7 @@ function App() {
 								height: 240,
 							}}
 						>
+							
 							<UserInfo
 								nickname={user.nickname}
 								custodyAccountPublicKey={user.custodyAccountPublicKey}
