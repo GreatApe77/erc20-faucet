@@ -11,6 +11,8 @@ import TopBar from "./components/TopBar";
 import { WalletContext } from "./context/WalletContext";
 import { getCurrentAccountInfo } from "./web3-services/ConnectSigner";
 import {
+	Alert,
+	AlertTitle,
 	Box,
 	Button,
 	Checkbox,
@@ -19,6 +21,7 @@ import {
 	FormControlLabel,
 	Grid,
 	Paper,
+	Snackbar,
 	TextField,
 	Typography,
 } from "@mui/material";
@@ -29,7 +32,7 @@ import { LoggedUser } from "./types/User";
 import { UserContext } from "./context/UserContext";
 import { checkERC20Balance } from "./web3-services/checkERC20Balance";
 import UserInfo from "./components/UserInfo";
-import { CheckBox } from "@mui/icons-material";
+
 import { claimFaucets } from "./services/claimFaucets";
 
 function App() {
@@ -37,7 +40,9 @@ function App() {
 	const { user, setUser } = useContext(UserContext);
 	const [useConnectedWallet, setUseConnectedWallet] = useState(false);
 	const [loading, setLoading] = useState(false);
-	
+	const [openSnackbar, setOpenSnackbar] = useState(false);
+	const [severity, setSeverity] = useState<"success" | "error" | "info" | "warning" | undefined>();
+	const [responseMessage, setResponseMessage] = useState<string>("");
 	const [walletInfo, setWalletInfo] = useState({
 		ethBalance: "",
 		erc20Balance: "",
@@ -110,9 +115,15 @@ function App() {
 		claimFaucets(walletToUse, useConnectedWallet,token)
 			.then((res) => {
 				if(res.status === 200){
-					loadUserInformation();
+					setSeverity("success");
+					setResponseMessage(res.data.message);
+					setOpenSnackbar(true);
+					//loadUserInformation();
 				}else{
-					alert(`Code: ${res.status} - ${res.data.message}`)
+					//alert(`Code: ${res.status} - ${res.data.message}`)
+					setSeverity("error");
+					setResponseMessage(res.data.message);
+					setOpenSnackbar(true);
 				}
 			})
 			.catch((err) => {
@@ -122,7 +133,13 @@ function App() {
 				setLoading(false);
 			});
 	}
-
+	const handleSnackBarClose = (_event?: React.SyntheticEvent | Event, reason?: string) => {
+		if (reason === 'clickaway') {
+		  return;
+		}
+	
+		setOpenSnackbar(false);
+	  };
 	return (
 		<>
 			<TopBar />
@@ -202,7 +219,7 @@ function App() {
 											variant="contained"
 											fullWidth
 											color="primary"
-											disabled={loading}
+											disabled={loading || !user.custodyAccountPublicKey}
 										>
 											{
 												loading ? <CircularProgress color="inherit" /> : "Claim Faucets"
@@ -215,6 +232,18 @@ function App() {
 					</Grid>
 				</Grid>
 			</Container>
+			<Snackbar anchorOrigin={{horizontal:"center",vertical:"top"}} open={openSnackbar} autoHideDuration={8000} onClose={handleSnackBarClose}>
+					<Alert
+						variant="filled"
+						onClose={handleSnackBarClose}
+						severity={severity}
+						sx={{ width: "100%" }}
+					>
+						<AlertTitle>{severity?.toUpperCase()}</AlertTitle>
+						{responseMessage}
+					</Alert>
+					
+				</Snackbar>
 		</>
 	);
 }
