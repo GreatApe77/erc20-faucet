@@ -5,8 +5,8 @@ import { ethers } from 'ethers';
 import {  nextClaim } from '../services/next-claim';
 export async function claimFaucetsController(req: Request, res: Response,next:NextFunction) {
     //Temporario
-    res.header("Access-Control-Allow-Origin", "*")
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
+    //res.header("Access-Control-Allow-Origin", "*")
+    //res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
     ////////////
     let address:string
 
