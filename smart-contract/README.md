@@ -1,13 +1,16 @@
-# Sample Hardhat Project
 
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, and a script that deploys that contract.
+# Smart Contract
 
-Try running some of the following tasks:
-
-```shell
-npx hardhat help
-npx hardhat test
-REPORT_GAS=true npx hardhat test
-npx hardhat node
-npx hardhat run scripts/deploy.ts
+## Instalação
+Primeiramente certifique-se de ter o [Node.js](https://nodejs.org/en/) instalado em sua máquina com o npm[https://www.npmjs.com/] e que você esteja na pasta ./smart-contract do repositório.
+```bash
+   npm ci
 ```
+## Testes
+Para rodar os testes, certifique-se de estar na pasta ./smart-contract do repositório e rode o seguinte comando:
+```bash
+   npm run test
+```
+
+## Solidity API 
+A API dos smart contracts está documentada [AQUI](./docs/index.md)
