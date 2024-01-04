@@ -33,6 +33,7 @@ function App() {
 	const [useConnectedWallet, setUseConnectedWallet] = useState(false);
 	const [loading, setLoading] = useState(false);
 	const [openSnackbar, setOpenSnackbar] = useState(false);
+	const [anchorToExplorer, setAnchorToExplorer] = useState("");
 	const [severity, setSeverity] = useState<
 		"success" | "error" | "info" | "warning" | undefined
 	>();
@@ -112,7 +113,9 @@ function App() {
 		claimFaucets(walletToUse, useConnectedWallet, token)
 			.then((res) => {
 				if (res.status === 200) {
+					let url = `https://testnet.ftmscan.com/tx/${res.data.transactionHash}`
 					setSeverity("success");
+					setAnchorToExplorer(url);
 					setResponseMessage(res.data.message);
 					setOpenSnackbar(true);
 					//loadUserInformation();
@@ -125,6 +128,7 @@ function App() {
 			})
 			.catch((err) => {
 				console.error(err);
+				setAnchorToExplorer("");
 			})
 			.finally(() => {
 				setLoading(false);
@@ -242,10 +246,25 @@ function App() {
 					variant="filled"
 					onClose={handleSnackBarClose}
 					severity={severity}
-					sx={{ width: "100%" }}
+					sx={{ width: "100%",}}
 				>
-					<AlertTitle>{severity?.toUpperCase()}</AlertTitle>
+					<AlertTitle >{severity?.toUpperCase()}</AlertTitle>
+					
 					{responseMessage}
+
+					
+					{anchorToExplorer && (
+						<Button
+							size="small"
+							variant="outlined"
+							color="secondary"
+							onClick={() => {
+								window.open(anchorToExplorer, "_blank");
+							}}
+						>
+							View on block explorer
+						</Button>
+					)}
 				</Alert>
 			</Snackbar>
 		</>
