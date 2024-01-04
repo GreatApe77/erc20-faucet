@@ -9,17 +9,28 @@ Na pasta ./server rode o seguinte comando:
     
 ## Transpilar o typescript
 
-Execute os comando a seguir
+Execute o comando a seguir
 
 ```bash
   npm run build
 ```
 
-## Executar com
+## Executar como desenvolvimento
 
-To run tests, run the following command
+Execute os seguintes comandos:
+
+1. Gerar os contratos tipados pela ABI
 
 ```bash
-  npm run test
+  npm run generatetypes
 ```
+2. Configurar as variáveis de ambiente com os valores corretos
 
+```bash
+  cp .env.example .env
+```
+3. Executar o servidor
+
+```bash
+  npm run dev
+```
