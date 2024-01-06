@@ -256,7 +256,7 @@ function App() {
 					{anchorToExplorer && (
 						<Button
 							size="small"
-							variant="outlined"
+							variant="text"
 							color="secondary"
 							onClick={() => {
 								window.open(anchorToExplorer, "_blank");
