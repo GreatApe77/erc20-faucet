@@ -25,7 +25,7 @@ export default function TopBar() {
 	const [connectingWallet, setConnectingWallet] = useState(false);
 	const [loginModalOpen, setLoginModalOpen] = useState(false);
 	const [registerModalOpen, setRegisterModalOpen] = useState(false);
-	const isMobile = useMediaQuery("(max-width:600px)");
+	const isMobile = useMediaQuery("(max-width:850px)");
 	const { connectWallet, account } = useContext(WalletContext);
 	const handleLoginModalOpen = () => setLoginModalOpen(true);
 	const handelRegisterModalOpen = () => setRegisterModalOpen(true);

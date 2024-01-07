@@ -144,12 +144,14 @@ function App() {
 
 		setOpenSnackbar(false);
 	};
+	//#272b33
 	return (
 		<>
+		<Box sx={{bgcolor:"#272b33",height:"100vh"}}>
 			<TopBar />
 			<Container  maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
 				<Grid container spacing={3}>
-					<Grid item xs={12} md={8} lg={9}>
+					<Grid  item xs={12} md={8} lg={9}>
 						<Paper
 							sx={{
 								p: 2,
@@ -268,6 +270,7 @@ function App() {
 					)}
 				</Alert>
 			</Snackbar>
+			</Box>
 		</>
 	);
 }
