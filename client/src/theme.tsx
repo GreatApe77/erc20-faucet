@@ -7,12 +7,7 @@ const theme = createTheme({
     primary: {
       main: '#11823b',
     },
-    secondary: {
-      main: '#f44336',
-    },
-    error: {
-      main: red.A400,
-    },
+    
   },
 });
 
