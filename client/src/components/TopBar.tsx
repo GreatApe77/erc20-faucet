@@ -65,7 +65,7 @@ export default function TopBar() {
 		window.location.reload();
 	}
 	return (
-		<AppBar color="transparent" position="static">
+		<AppBar sx={{bgcolor:"black"}} position="static">
 			<Toolbar sx={{ justifyContent: "space-between" }}>
 				{/* Left side - Logo and Name */}
 				<Box sx={{ display: "flex", alignItems: "center" }}>
@@ -102,7 +102,7 @@ export default function TopBar() {
 						>
 							Register
 						</Button>
-						<Button onClick={logout} color="warning" variant="text">
+						<Button onClick={logout} color="error" variant="text">
 							Logout
 						</Button>
 						<Button
