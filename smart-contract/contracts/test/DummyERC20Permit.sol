@@ -8,7 +8,7 @@ import {ERC20Permit} from "../erc20/ERC20Permit.sol";
  * @notice Implementacao de um token ERC20 para testes
  */
 
-contract DummyERC20 is ERC20,ERC20Permit {
+contract DummyERC20Permit is ERC20,ERC20Permit {
     constructor(
         string memory name,
         string memory symbol,
