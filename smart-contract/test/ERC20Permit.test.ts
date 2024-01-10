@@ -108,7 +108,7 @@ describe("ERC20Permit", () => {
         const signature = await roles.ownerOfTokens.signTypedData(domain,types,values)
         const sigComponents = ethers.Signature.from(signature)
         const spenderInstance = erc20.connect(roles.spenderOfTokens)
-        await time.increase(1001)
+        await time.increase(10000)
         await expect( spenderInstance.permit(
             roles.ownerOfTokens.address,
             roles.spenderOfTokens.address,
@@ -118,5 +118,45 @@ describe("ERC20Permit", () => {
             sigComponents.r,
             sigComponents.s
             )).to.be.revertedWithCustomError(erc20,"ERC2612ExpiredSignature")
+    })
+    it("should not permit (wrong deadline passed)",async()=>{
+        const {erc20,accounts} = await loadFixture(deployFixture);
+        const roles = {
+            ownerOfTokens: accounts[0],
+            spenderOfTokens: accounts[1],
+            randomPerson: accounts[2],
+        }
+        const deadline = getTimeStamp() + 1000;
+        const nonce = await erc20.nonces(roles.ownerOfTokens);
+        const amount = ethers.parseEther("100");
+        const chainId = (await ethers.provider.getNetwork()).chainId
+        const domain = {
+            name: await erc20.name(),
+            version: "1",
+            chainId: chainId,
+            verifyingContract: await erc20.getAddress()
+
+        }
+        const values = {
+            owner: roles.ownerOfTokens.address,
+            spender: roles.spenderOfTokens.address,
+            value: amount,
+            nonce: nonce,
+            deadline: deadline
+        }
+
+        const signature = await roles.ownerOfTokens.signTypedData(domain,types,values)
+        const sigComponents = ethers.Signature.from(signature)
+        const spenderInstance = erc20.connect(roles.spenderOfTokens)
+        const wrongDeadlineToPass = getTimeStamp() +999
+        await expect( spenderInstance.permit(
+            roles.ownerOfTokens.address,
+            roles.spenderOfTokens.address,
+            amount,
+            wrongDeadlineToPass,
+            sigComponents.v,
+            sigComponents.r,
+            sigComponents.s
+            )).to.be.revertedWithCustomError(erc20,"ERC2612InvalidSigner")
     })
 })
