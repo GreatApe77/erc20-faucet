@@ -159,4 +159,10 @@ describe("ERC20Permit", () => {
             sigComponents.s
             )).to.be.revertedWithCustomError(erc20,"ERC2612InvalidSigner")
     })
+    it("should return the correct Domain Separator",async()=>{
+        const {erc20,accounts} = await loadFixture(deployFixture);
+        const expectedDomainSeparator = "0xfd462f3fcea860cf278d9174be174faf02742483c29da3815b12195bf812e825"
+        const DOMAIN_SEPARATOR = await erc20.DOMAIN_SEPARATOR()
+        expect(DOMAIN_SEPARATOR).to.be.equal(expectedDomainSeparator)
+    })
 })
