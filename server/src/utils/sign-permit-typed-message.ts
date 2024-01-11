@@ -7,7 +7,12 @@ export type SigningParams ={
     deadline:string
 
 }
-
+/**
+ * @dev Assina uma mensagem tipada com os parametros
+ * @param signer Conta do owner dos tokens que assinará a aprovacao offchain
+ * @param params Parametros de assinatura
+ * @returns A assinatura para ser decomposta e validada
+ */
 export async function signPermitTypedMessage(
     signer:JsonRpcSigner,
     params:SigningParams,
@@ -44,11 +49,14 @@ export async function signPermitTypedMessage(
             verifyingContract: await greatApe77CoinInstance.getAddress()
 
         }
+        const nonce = await greatApe77CoinInstance.nonces(signer.address)
         const values = {
             owner: signer.address,
             spender: params.spender,
-            value: params.amount
-            nonce: await greatApe77CoinInstance.nonces(signer.address),
-            deadline: deadline
+            value: params.amount,
+            nonce: nonce,
+            deadline: params.deadline
         }
+        const signature = await signer.signTypedData(domain,types,values)
+        return signature
     }
