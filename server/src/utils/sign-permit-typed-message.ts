@@ -1,4 +1,4 @@
-import {JsonRpcSigner} from "ethers"
+import {JsonRpcSigner, Wallet} from "ethers"
 import { greatApe77CoinInstance } from "../config/web3-services";
 export type SigningParams ={
     
