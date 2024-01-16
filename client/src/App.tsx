@@ -26,6 +26,7 @@ import { checkERC20Balance } from "./web3-services/checkERC20Balance";
 import UserInfo from "./components/UserInfo";
 
 import { claimFaucets } from "./services/claimFaucets";
+import TransferToConnectedWalletForm from "./components/TransferToConnectedWalletForm";
 
 function App() {
 	const { setAccount, account } = useContext(WalletContext);
@@ -147,7 +148,7 @@ function App() {
 	//#272b33
 	return (
 		<>
-		<Box sx={{bgcolor:"#272b33",height:"100vh"}}>
+		<Box >
 			<TopBar />
 			<Container  maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
 				<Grid container spacing={3}>
@@ -238,6 +239,7 @@ function App() {
 					</Grid>
 				</Grid>
 			</Container>
+			<TransferToConnectedWalletForm/>
 			<Snackbar
 				anchorOrigin={{ horizontal: "center", vertical: "top" }}
 				open={openSnackbar}
