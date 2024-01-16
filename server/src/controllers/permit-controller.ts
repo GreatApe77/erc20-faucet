@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { TypeUser } from "../@types/User";
 import { signPermitTypedMessage } from "../utils/sign-permit-typed-message";
 import { JsonRpcSigner, Wallet, ethers } from "ethers";
+import { wallet } from "../config/web3-services";
 import { provider } from "../config/web3-services";
 import { permit } from "../services/permit";
 
@@ -11,7 +12,8 @@ export async function permitController(
   next: NextFunction
 ) {
   const userCredentials = req.body.userCredentials as TypeUser;
-  const { spender, amount } = req.body;
+  const { amount } = req.body;
+  const spender = wallet.address
   const fiveMinutesInTheFuture = Date.now() / 1000 + 300;
   const deadline = process.env.PERMIT_DEADLINE || fiveMinutesInTheFuture;
   const signer = new ethers.JsonRpcSigner(
