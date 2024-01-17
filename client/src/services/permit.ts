@@ -3,11 +3,13 @@ import { ApiResponse } from "../types/ApiResponse"
 
 export async function permit(amount:string,token:string){
     try {
+        console.log({amount})
         const response = await fetch(`${SERVER_URL}/permit`,
             {
                 method: "POST",
                 headers:{
-                    authorization: `Bearer ${token}`
+                    authorization: `Bearer ${token}`,
+                    "Content-Type":"application/json"
                 },
                 body:JSON.stringify({amount})
             }

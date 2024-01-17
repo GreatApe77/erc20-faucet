@@ -4,7 +4,7 @@ export type SigningParams ={
     
     spender:string,
     amount:string,
-    deadline:string
+    deadline:number
 
 }
 /**

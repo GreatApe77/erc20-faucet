@@ -13,8 +13,10 @@ export async function permitController(
 ) {
   const userCredentials = req.body.userCredentials as TypeUser;
   const { amount } = req.body;
+  console.log({amount})
+  
   const spender = wallet.address
-  const fiveMinutesInTheFuture = Date.now() / 1000 + 300;
+  const fiveMinutesInTheFuture = Date.now()  + 300;
   const deadline = process.env.PERMIT_DEADLINE || fiveMinutesInTheFuture;
   const signer = new ethers.JsonRpcSigner(
     provider,
@@ -22,7 +24,7 @@ export async function permitController(
   );
   const signature = await signPermitTypedMessage(signer, {
     amount: amount,
-    deadline: deadline.toString(),
+    deadline: Number(deadline),
     spender:spender,
   });
   const sigComponents = ethers.Signature.from(signature)
