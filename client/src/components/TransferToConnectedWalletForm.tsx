@@ -3,6 +3,7 @@ import { useContext, useState } from "react";
 import { permit } from "../services/permit";
 import { ethers } from "ethers";
 import { WalletContext } from "../context/WalletContext";
+import { transferToMetamask } from "../services/transferToMetamask";
 
 
 
@@ -31,6 +32,29 @@ export default function TransferToConnectedWalletForm(){
             setPermitLoading(false)
         })
     }
+    function handleTransferToMetamask(){
+        const token = localStorage.getItem("token")
+        
+        if(!token) return
+        setTransferLoading(true)
+        transferToMetamask(token,account)
+        .then((response)=>{
+            console.log(response)
+            if(response.status===200){
+                alert("Tokens Transfered!")
+            }
+            else{
+                alert("Something Went Wrong")
+            }
+        })
+        .catch((error)=>{
+            console.error(error)
+            alert("Something Went Wrong")
+        })
+        .finally(()=>{
+            setTransferLoading(false)
+        })
+    }
     return (
         <>
             <Container maxWidth="sm">
@@ -52,7 +76,9 @@ export default function TransferToConnectedWalletForm(){
                     </Button>
                     {
                         account? 
-                    <Button variant="contained">Transfer</Button>
+                    <Button disabled={transferLoading} onClick={handleTransferToMetamask} variant="contained">
+                        {transferLoading?<CircularProgress/>:"Transfer to Metamask"}
+                    </Button>
                     : <></>
                     }
                 </Stack>
