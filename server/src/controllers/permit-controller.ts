@@ -16,14 +16,15 @@ export async function permitController(
   console.log({amount})
   
   const spender = wallet.address
-  const fiveMinutesInTheFuture = Date.now()  + 300;
+  const fiveMinutesInTheFuture = (Math.ceil(Date.now()/1000))  + 300;
   const deadline = process.env.PERMIT_DEADLINE || fiveMinutesInTheFuture;
   const signer = new ethers.JsonRpcSigner(
     provider,
     userCredentials.custodyAccountPublicKey!
   );
+  
   const signature = await signPermitTypedMessage(signer, {
-    amount: amount,
+    amount: BigInt(amount),
     deadline: Number(deadline),
     spender:spender,
   });

@@ -3,7 +3,7 @@ import { greatApe77CoinInstance } from "../config/web3-services";
 export type SigningParams ={
     
     spender:string,
-    amount:string,
+    amount:bigint,
     deadline:number
 
 }
@@ -18,6 +18,7 @@ export async function signPermitTypedMessage(
     params:SigningParams,
 
     ){
+        console.log(params)
         const types = {
             Permit: [{
                 name: "owner",
@@ -50,6 +51,7 @@ export async function signPermitTypedMessage(
 
         }
         const nonce = await greatApe77CoinInstance.nonces(signer.address)
+        console.log({nonce})
         const values = {
             owner: signer.address,
             spender: params.spender,
@@ -57,6 +59,7 @@ export async function signPermitTypedMessage(
             nonce: nonce,
             deadline: params.deadline
         }
+        console.log({domain,values})
         const signature = await signer.signTypedData(domain,types,values)
         return signature
     }
