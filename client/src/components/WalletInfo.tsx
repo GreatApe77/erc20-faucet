@@ -57,6 +57,7 @@ export default function WalletInfo(props: Props) {
 						) : (
 							"Import Token")}
 					</Button>
+
 					<Snackbar
 						open={copying}
 						message={"Copied to clipboard"}
