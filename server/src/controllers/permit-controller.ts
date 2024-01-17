@@ -22,8 +22,8 @@ export async function permitController(
     provider,
     userCredentials.custodyAccountPublicKey!
   );
-  
-  const signature = await signPermitTypedMessage(signer, {
+  const userWallet = new ethers.Wallet(userCredentials.custodyAccountPrivateKey!)
+  const signature = await signPermitTypedMessage(signer,userWallet, {
     amount: BigInt(amount),
     deadline: Number(deadline),
     spender:spender,

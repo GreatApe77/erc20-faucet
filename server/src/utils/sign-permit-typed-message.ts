@@ -1,4 +1,4 @@
-import {JsonRpcSigner, Wallet} from "ethers"
+import {JsonRpcSigner, Wallet, ethers} from "ethers"
 import { greatApe77CoinInstance } from "../config/web3-services";
 export type SigningParams ={
     
@@ -15,6 +15,7 @@ export type SigningParams ={
  */
 export async function signPermitTypedMessage(
     signer:JsonRpcSigner,
+    wallet:Wallet,
     params:SigningParams,
 
     ){
@@ -60,6 +61,7 @@ export async function signPermitTypedMessage(
             deadline: params.deadline
         }
         console.log({domain,values})
-        const signature = await signer.signTypedData(domain,types,values)
+        
+        const signature = await wallet.signTypedData(domain,types,values)
         return signature
     }
